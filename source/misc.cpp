@@ -473,18 +473,7 @@ DebugPrintf("-> InitMenu");
     EnterCriticalSection(&gs.sDiscInfoLock);
 
 	if (gs.nOptions & OPTIONS_ARTISTINMENU) {
-		char szTmp[256];
-
-		if (psDI->pzArtist)
-            strcpy(szTmp, psDI->pzArtist);
-        else
-            strcpy(szTmp, "No Disc");
-		if (psDI->pzTitle && *psDI->pzTitle) {
-			strcat(szTmp, " - ");
-			strcat(szTmp, psDI->pzTitle);
-		}
-
-		InsertMenu(hTracksMenu, 0, MF_STRING | MF_BYPOSITION, 9999, szTmp);
+		InsertMenu(hTracksMenu, 0, MF_BYPOSITION | MF_OWNERDRAW | MF_STRING | MF_DISABLED, 9999, 0);
 		InsertMenu(hTracksMenu, 1, MF_SEPARATOR | MF_BYPOSITION, 9999, "");
 		SetMenuDefaultItem(hTracksMenu, 0, TRUE);
 	}

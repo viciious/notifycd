@@ -270,7 +270,6 @@ typedef struct {
 	unsigned int nMenuBreak;
 	unsigned int nRepeatTrack;
 	unsigned int nNextProgrammedTrack;
-	HFONT hMenuFont;
 	HBITMAP hMenuBitmap;
 	unsigned int* pnLastRandomTracks;
 	unsigned int nLastRandomTrack;

@@ -197,20 +197,6 @@ void UpdateMenu(DISCINFO* psDI, HMENU hMenu)
     EnterCriticalSection(&gs.sDiscInfoLock);
 
     if (gs.state.bAudio && gs.state.bInit && gs.state.bMediaPresent) {
-	    if (gs.nOptions & OPTIONS_ARTISTINMENU) {
-		    char szTmp[256];
-
-		    strcpy(szTmp, psDI->pzArtist);
-		    if (psDI->pzTitle && *psDI->pzTitle) {
-			    strcat(szTmp, " - ");
-			    strcat(szTmp, psDI->pzTitle);
-		    }
-
-			CheckAmpersand(szTmp, FALSE);
-
-		    ModifyMenu(hMenu, 0, MF_STRING | MF_BYPOSITION, 9999, szTmp);
-	    }
-
         EnableMenuItem(hMenu, IDM_PLAY, MF_BYCOMMAND | MF_ENABLED);
         EnableMenuItem(hMenu, IDM_PAUSE, MF_BYCOMMAND | MF_ENABLED);
         EnableMenuItem(hMenu, IDM_STOP, MF_BYCOMMAND | MF_ENABLED);
@@ -314,9 +300,6 @@ void UpdateMenu(DISCINFO* psDI, HMENU hMenu)
 		}
     }
     else {
-	    if (gs.nOptions & OPTIONS_ARTISTINMENU)
-		    ModifyMenu(hMenu, 0, MF_STRING | MF_BYPOSITION, 9999, "No Disc");
-
         EnableMenuItem(hMenu, IDM_CLOSE, MF_BYCOMMAND | MF_ENABLED);
 
         EnableMenuItem(hMenu, IDM_PLAY, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
@@ -1641,44 +1624,96 @@ LRESULT CALLBACK MainWindowProc(
             MEASUREITEMSTRUCT* psI = (MEASUREITEMSTRUCT*) lParam;
             if (psI->itemID == 999) {
                 psI->itemWidth = 15;
-
                 return TRUE;
-            }
+            } else {
+				char szTmp[256];
+				DISCINFO *psDI = &gs.di[0];
+				HDC hDC = GetDC (NULL);
+				SIZE size;
+
+				EnterCriticalSection(&gs.sDiscInfoLock);
+
+				if (psDI->pzArtist)
+					strcpy(szTmp, psDI->pzArtist);
+				else
+					strcpy(szTmp, "No Disc");
+				if (psDI->pzTitle && *psDI->pzTitle) {
+					strcat(szTmp, " - ");
+					strcat(szTmp, psDI->pzTitle);
+				}
+
+				CheckAmpersand (szTmp, FALSE);
+
+				GetTextExtentPoint32 (hDC, szTmp, strlen(szTmp), (LPSIZE)&size);
+
+				psI->itemWidth = size.cx + GetSystemMetrics(SM_CXMENUCHECK) + 2;
+				psI->itemHeight = size.cy;
+
+				LeaveCriticalSection(&gs.sDiscInfoLock);
+                return TRUE;
+			}
         }
         break;
 
         case WM_DRAWITEM: {
             DRAWITEMSTRUCT* psI = (DRAWITEMSTRUCT*) lParam;
-            if (psI->itemID == 999 && psI->itemAction == ODA_DRAWENTIRE) {
-                HWND hMenuWnd = WindowFromDC(psI->hDC);
-				if (IsWindow (hMenuWnd))
-				{
-					RECT sRect;
+			if (psI->itemAction == ODA_DRAWENTIRE)
+			{
+				if (psI->itemID == 999) {
+					HWND hMenuWnd = WindowFromDC(psI->hDC);
+					if (IsWindow (hMenuWnd))
+					{
+						RECT sRect;
 
-					GetClientRect(hMenuWnd, &sRect);
+						GetClientRect(hMenuWnd, &sRect);
 
-					// TEMP
+						// TEMP
 
-					HDC hDC = CreateCompatibleDC(psI->hDC);
-					gs.hMenuBitmap = (HBITMAP)SelectObject(hDC, gs.hMenuBitmap);
+						HDC hDC = CreateCompatibleDC(psI->hDC);
+						gs.hMenuBitmap = (HBITMAP)SelectObject(hDC, gs.hMenuBitmap);
 
-					psI->rcItem.bottom = (sRect.bottom - sRect.top);
-					BitBlt(psI->hDC, psI->rcItem.left, psI->rcItem.bottom - 330, 26, 330, hDC, 0, 0, SRCCOPY);
-					RealizePalette(psI->hDC);
+						psI->rcItem.bottom = (sRect.bottom - sRect.top);
+						BitBlt(psI->hDC, psI->rcItem.left, psI->rcItem.bottom - 330, 26, 330, hDC, 0, 0, SRCCOPY);
+						RealizePalette(psI->hDC);
 
-					if (psI->rcItem.bottom - 330 > 0) {
-						psI->rcItem.top = 0;
-						psI->rcItem.bottom = 330 - psI->rcItem.bottom;
+						if (psI->rcItem.bottom - 330 > 0) {
+							psI->rcItem.top = 0;
+							psI->rcItem.bottom = 330 - psI->rcItem.bottom;
 
-						FillRect(psI->hDC, &psI->rcItem, (HBRUSH)GetStockObject(BLACK_BRUSH));
+							FillRect(psI->hDC, &psI->rcItem, (HBRUSH)GetStockObject(BLACK_BRUSH));
+						}
+
+						gs.hMenuBitmap = (HBITMAP)SelectObject(hDC, gs.hMenuBitmap);
+						DeleteDC(hDC);
+					}
+				} else {
+					char szTmp[256];
+					DISCINFO *psDI = &gs.di[0];
+
+					EnterCriticalSection(&gs.sDiscInfoLock);
+
+					if (psDI->pzArtist)
+						strcpy(szTmp, psDI->pzArtist);
+					else
+						strcpy(szTmp, "No Disc");
+					if (psDI->pzTitle && *psDI->pzTitle) {
+						strcat(szTmp, " - ");
+						strcat(szTmp, psDI->pzTitle);
 					}
 
-					gs.hMenuBitmap = (HBITMAP)SelectObject(hDC, gs.hMenuBitmap);
-					DeleteDC(hDC);
+					CheckAmpersand (szTmp, FALSE);
 
-					return TRUE;
+					if (psI->itemAction == ODA_DRAWENTIRE)
+					{
+						ExtTextOut(psI->hDC, 0, 0, ETO_OPAQUE, &psI->rcItem, NULL, 0, NULL);
+						psI->rcItem.left += GetSystemMetrics (SM_CXMENUCHECK) + 2;
+						DrawText(psI->hDC, szTmp, -1, &psI->rcItem, DT_SINGLELINE|DT_VCENTER|DT_LEFT);
+					}
+
+					LeaveCriticalSection(&gs.sDiscInfoLock);
 				}
-            }
+				return TRUE;
+			}
         }
         break;
 
@@ -2449,7 +2484,6 @@ int WINAPI WinMain(
 	gs.nMenuBreak = 20;
 	gs.nRepeatTrack = 0;
 	gs.nNextProgrammedTrack = 0;
-	gs.hMenuFont = NULL;
 	gs.hMenuBitmap = NULL;
 	gs.pnLastRandomTracks = NULL;
 	gs.nLastRandomTrack = 0;
@@ -2591,10 +2625,6 @@ int WINAPI WinMain(
 
     strcpy(gs.szToolTip, APPNAME);
 
-    gs.hMenuFont = CreateFont(20, 0, 900, 0, FW_EXTRABOLD, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, 
-                       CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, VARIABLE_PITCH | FF_DONTCARE, "Arial");
-//    gs.hMenuBitmap = LoadBitmap(gs.hMainInstance, MAKEINTRESOURCE(IDB_NOTIFY));
-
     gs.hMainWnd = CreateWindow("NOTIFY_CD_CLASS", 
                             APPNAME, 
                             WS_POPUP/* | WS_VISIBLE | WS_CAPTION*/,
@@ -2645,8 +2675,6 @@ int WINAPI WinMain(
 
     if (gs.cddb.psCDDBServers)
         delete[] gs.cddb.psCDDBServers;
-
-    DeleteObject(gs.hMenuFont);
 
 	if (gs.hMenuBitmap)
 		DeleteObject(gs.hMenuBitmap);
