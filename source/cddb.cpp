@@ -655,8 +655,8 @@ void WriteEntry(DISCINFO* psDI, FILE* fp, BOOL bLocal)
     for (nLoop = 0 ; nLoop < psDI->nTracks ; nLoop ++) {
         if (psDI->pnFrames)
             fprintf(fp, "#\t%d\n", psDI->pnFrames[nLoop]);
-        else
-            fprintf(fp, "#\t%d\n", psDI->pnFrames[nLoop]);
+//        else
+//            fprintf(fp, "#\t%d\n", psDI->pnFrames[nLoop]);
     }
 
     // Write disc length

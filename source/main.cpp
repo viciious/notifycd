@@ -959,21 +959,23 @@ LRESULT CALLBACK MainWindowProc(
 
 						if (gs.SetLayeredWindowAttributes)
 						{
+#if 0
 							BOOL bMenuFading, bMenuAnim;
 
 							SystemParametersInfo(SPI_GETMENUFADE, 0, &bMenuFading, 0);
 							SystemParametersInfo(SPI_GETMENUANIMATION, 0, &bMenuAnim, 0);
 							SystemParametersInfo(SPI_SETMENUFADE, 0, (LPVOID) FALSE, SPIF_SENDWININICHANGE);
 							SystemParametersInfo(SPI_SETMENUANIMATION, 0, (LPVOID) FALSE, SPIF_SENDWININICHANGE);
-
+#endif
 							if (gs.nOptions & OPTIONS_MENUTRANS)
 							{
 								SetWindowLong (hMenuWnd, GWL_EXSTYLE, GetWindowLong(hMenuWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
 								gs.SetLayeredWindowAttributes(hMenuWnd, RGB(0,0,0), (BYTE)((float)gs.nMenuAlpha*255/100), LWA_ALPHA);
 							}
-
+#if 0
 							SystemParametersInfo(SPI_SETMENUFADE, 0, (LPVOID) bMenuFading, SPIF_SENDWININICHANGE);
 							SystemParametersInfo(SPI_SETMENUANIMATION, 0, (LPVOID) bMenuAnim, SPIF_SENDWININICHANGE);
+#endif
 						}
 					}
 				}
