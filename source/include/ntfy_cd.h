@@ -25,6 +25,19 @@
 
 #include "app.h"
 
+#ifndef WS_EX_LAYERED
+ #define WS_EX_LAYERED				0x00080000
+#endif
+#ifndef LWA_ALPHA
+ #define LWA_ALPHA					0x00000002
+#endif
+#ifndef SPI_GETMENUANIMATION
+ #define SPI_GETMENUANIMATION		0x1002
+ #define SPI_GETMENUFADE			0x1012
+ #define SPI_SETMENUANIMATION		0x1003
+ #define SPI_SETMENUFADE			0x1013
+#endif
+
 /////////////////////////////////////////////////////////////////////
 //
 // DEFINES
@@ -66,6 +79,8 @@
 #define OPTIONS_AUTOCHECKFORNEWVERSION  0x00040000
 #define OPTIONS_AUTORETRIEVEQUEUE       0x00080000
 
+#define OPTIONS_MENUTRANS				0x00100000
+
 #define OPTIONS_DEFAULT					(OPTIONS_USECDDB|OPTIONS_STORELOCAL|OPTIONS_QUERYLOCAL|OPTIONS_STOPONEXIT|OPTIONS_EXITONCDREMOVE|OPTIONS_REMEMBERSTATUS)
 
 #define OPTIONS_CDDB_STORECOPYININI	    0x00000001
@@ -80,23 +95,23 @@
 //
 /////////////////////////////////////////////////////////////////////
 
-#define V121_SETTINGS_STOPONEXIT               1
-#define V121_SETTINGS_STOPONSTART              2
-#define V121_SETTINGS_EXITONCDREMOVE           4
-#define V121_SETTINGS_PREVALWAYSPREV           8
-#define V121_SETTINGS_REMEMBERSTATUS          16
-#define V121_SETTINGS_NOINSERTNOTIFICATION    32
-#define V121_SETTINGS_TRACKSMENUCOLUMN        64
-#define V121_SETTINGS_NOMENUBITMAP           128
-#define V121_SETTINGS_NOMENUBREAK            256
+#define V121_SETTINGS_STOPONEXIT            1
+#define V121_SETTINGS_STOPONSTART           2
+#define V121_SETTINGS_EXITONCDREMOVE        4
+#define V121_SETTINGS_PREVALWAYSPREV        8
+#define V121_SETTINGS_REMEMBERSTATUS        16
+#define V121_SETTINGS_NOINSERTNOTIFICATION  32
+#define V121_SETTINGS_TRACKSMENUCOLUMN      64
+#define V121_SETTINGS_NOMENUBITMAP          128
+#define V121_SETTINGS_NOMENUBREAK			256
 
-#define V121_OPTIONS_QUERYLOCAL          1
-#define V121_OPTIONS_QUERYREMOTE         2
-#define V121_OPTIONS_STORELOCAL          4
-#define V121_OPTIONS_NOTRAYICON          8
-#define V121_OPTIONS_STORERESULT        16
-#define V121_OPTIONS_USEHTTP			32
-#define V121_OPTIONS_USEPROXY		    64
+#define V121_OPTIONS_QUERYLOCAL				1
+#define V121_OPTIONS_QUERYREMOTE			2
+#define V121_OPTIONS_STORELOCAL				4
+#define V121_OPTIONS_NOTRAYICON				8
+#define V121_OPTIONS_STORERESULT			16
+#define V121_OPTIONS_USEHTTP				32
+#define V121_OPTIONS_USEPROXY				64
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -221,6 +236,8 @@ typedef struct {
     unsigned int nLastCaptionXPos;
 	DWORD nCaptionFontColor;
 
+	unsigned int nMenuAlpha;
+
 	// Menu indexes
 
 	unsigned int nMenuIndexTracks;
@@ -270,6 +287,9 @@ typedef struct {
 
     DISCINFO sQueryThreadDI;
     BOOL bQueryThreadHasUpdatedDI;
+
+	HINSTANCE hUserDll;
+	BOOL (WINAPI *SetLayeredWindowAttributes)(HWND,COLORREF,BYTE,DWORD);
 
     // State
 	struct {

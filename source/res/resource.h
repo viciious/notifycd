@@ -174,6 +174,7 @@
 #define IDC_CHECKVERSION                1086
 #define IDC_BUTTON1                     1087
 #define IDC_SLIDER1                     1088
+#define IDC_TRANS_SLIDER                1088
 #define IDC_CLICK1                      1089
 #define IDC_CLICK2                      1090
 #define IDC_CLICK3                      1091
@@ -207,6 +208,8 @@
 #define IDC_EXAMPLE                     1114
 #define IDC_SEARCH                      1115
 #define IDC_REGISTERDEFAULT             1116
+#define IDC_TRANS_CHECK                 1118
+#define IDC_TRANS_TEXT                  1120
 #define IDM_PLAY                        40007
 #define IDM_NEXT                        40008
 #define IDM_QUIT                        40009
@@ -256,7 +259,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        134
 #define _APS_NEXT_COMMAND_VALUE         40064
-#define _APS_NEXT_CONTROL_VALUE         1118
+#define _APS_NEXT_CONTROL_VALUE         1121
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -961,6 +961,42 @@ LRESULT CALLBACK MainWindowProc(
 		}
 		break;
 
+		case WM_INITMENUPOPUP:
+			{
+				HWND hMenuWnd = FindWindow( "#32768", NULL );
+				if (IsWindow (hMenuWnd) && gs.sVersionInfo.dwMajorVersion >= 5)
+				{
+					if (!(gs.nOptions & OPTIONS_NOMENUBITMAP) || (gs.nOptions & OPTIONS_MENUTRANS))
+					{
+						if (!gs.hUserDll)
+							gs.hUserDll = LoadLibrary("user32.dll");
+						if (gs.hUserDll)
+							if (!gs.SetLayeredWindowAttributes)
+								gs.SetLayeredWindowAttributes = (BOOL (WINAPI *)(HWND,COLORREF,BYTE,DWORD))GetProcAddress(gs.hUserDll, "SetLayeredWindowAttributes");
+
+						if (gs.SetLayeredWindowAttributes)
+						{
+							BOOL bMenuFading, bMenuAnim;
+
+							SystemParametersInfo(SPI_GETMENUFADE, 0, &bMenuFading, 0);
+							SystemParametersInfo(SPI_GETMENUANIMATION, 0, &bMenuAnim, 0);
+							SystemParametersInfo(SPI_SETMENUFADE, 0, (LPVOID) FALSE, SPIF_SENDWININICHANGE);
+							SystemParametersInfo(SPI_SETMENUANIMATION, 0, (LPVOID) FALSE, SPIF_SENDWININICHANGE);
+
+							if (gs.nOptions & OPTIONS_MENUTRANS)
+							{
+								SetWindowLong (hMenuWnd, GWL_EXSTYLE, GetWindowLong(hMenuWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
+								gs.SetLayeredWindowAttributes(hMenuWnd, RGB(0,0,0), (BYTE)((float)gs.nMenuAlpha*255/100), LWA_ALPHA);
+							}
+
+							SystemParametersInfo(SPI_SETMENUFADE, 0, (LPVOID) bMenuFading, SPIF_SENDWININICHANGE);
+							SystemParametersInfo(SPI_SETMENUANIMATION, 0, (LPVOID) bMenuAnim, SPIF_SENDWININICHANGE);
+						}
+					}
+				}
+			}
+			break;
+
 		case WM_ENDSESSION: {
 			if (wParam) {
 				SaveConfig();
@@ -1809,9 +1845,9 @@ void LoadConfig()
     }
 
     gs.nOptions = ProfileGetInt("NTFY_CD", "Settings", -1);
-DebugPrintf("gs.nOptions = %d", gs.nOptions);
+	DebugPrintf("gs.nOptions = %d", gs.nOptions);
     gs.nPollTime = ProfileGetInt("NTFY_CD", "PollTime", 1);
-DebugPrintf("gs.nPollTime = %d", gs.nPollTime);
+	DebugPrintf("gs.nPollTime = %d", gs.nPollTime);
     gs.state.bRepeat = ProfileGetInt("NTFY_CD", "Repeat", 0);
     nLeftButtonPause = ProfileGetInt("NTFY_CD", "LeftButtonPause", 1);
     nLeftButtonNext = ProfileGetInt("NTFY_CD", "LeftButtonNext", 2);
@@ -1999,6 +2035,13 @@ DebugPrintf("gs.nPollTime = %d", gs.nPollTime);
         if (nStatus & STATUS_REPEAT)
             gs.state.bRepeat = TRUE;
     }
+	
+	// Menu translucency
+	gs.nMenuAlpha = ProfileGetInt("NTFY_CD", "MenuAlpha", 85);
+	if (gs.nMenuAlpha < 20)
+		gs.nMenuAlpha = 20;
+	else if (gs.nMenuAlpha > 100)
+		gs.nMenuAlpha = 100;
 
     // Load categories
 
@@ -2129,6 +2172,8 @@ void SaveConfig()
     }
 
     if( !ProfileWriteInt( "NTFY_CD", "DefaultDevice", gs.nDefaultDevice ) )
+		return;
+    if( !ProfileWriteInt( "NTFY_CD", "MenuAlpha", gs.nMenuAlpha ) )
 		return;
     if( !ProfileWriteInt( "NTFY_CD", "HasNotification", gs.bHasNotification ) )
 		return;
@@ -2607,6 +2652,9 @@ int WINAPI WinMain(
 		DeleteObject(gs.hMenuBitmap);
 
     DestroyMenu(gs.hTrackMenu);
+
+	if (gs.hUserDll)
+		FreeLibrary (gs.hUserDll);
 
     if (gs.nOptions & OPTIONS_SHOWONCAPTION) {
         HWND hForegroundWnd = GetForegroundWindow();

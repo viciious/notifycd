@@ -172,12 +172,25 @@ BOOL APIENTRY OptionsTab_General(
             if (gs.nOptions & OPTIONS_AUTOCHECKFORNEWVERSION)
                 SendDlgItemMessage(hWnd, IDC_AUTOCHECKFORNEWVERSION, BM_SETCHECK, 1, 0);                
 
+			// Translucency
+			CheckDlgButton (hWnd,IDC_TRANS_CHECK, ((gs.nOptions & OPTIONS_MENUTRANS) ? BST_CHECKED:BST_UNCHECKED));
+			if (gs.sVersionInfo.dwMajorVersion < 5)
+				EnableWindow(GetDlgItem(hWnd,IDC_TRANS_CHECK),FALSE);
+
+			SendDlgItemMessage(hWnd,IDC_TRANS_SLIDER,TBM_SETRANGE,FALSE,MAKELONG(20,100));
+			SendDlgItemMessage(hWnd,IDC_TRANS_SLIDER,TBM_SETPOS,TRUE,gs.nMenuAlpha);
+			if(gs.sVersionInfo.dwMajorVersion < 5 || !IsDlgButtonChecked(hWnd,IDC_TRANS_CHECK))
+			{
+				EnableWindow(GetDlgItem(hWnd,IDC_TRANS_SLIDER),FALSE);
+				EnableWindow(GetDlgItem(hWnd,IDC_TRANS_TEXT),FALSE);
+			}
+			SendMessage(hWnd,WM_HSCROLL,999,0);
+
 			// Poll time
 
 			SetDlgItemInt(hWnd, IDC_POLLTIME, gs.nPollTime, FALSE);
 
             // Default CD device
-
             char szTmp[512];
             int nCount = 0;
 
@@ -197,6 +210,17 @@ BOOL APIENTRY OptionsTab_General(
 			sprintf( szTmp, "&Register %s as default player (Win 95\\98)", APPNAME );
 			SetWindowText(GetDlgItem(hWnd, IDC_REGISTERDEFAULT), szTmp);
         }
+		break;
+
+		case WM_HSCROLL: {
+			int nTmp;
+            char szTmp[8];
+
+			nTmp = SendDlgItemMessage(hWnd,IDC_TRANS_SLIDER,TBM_GETPOS,0,0);
+			StringPrintf (szTmp, sizeof(szTmp), "%3d%%", nTmp);
+			SetDlgItemText (hWnd, IDC_TRANS_TEXT, szTmp);
+
+		}
 		break;
 
         case WM_COMMAND: {
@@ -317,7 +341,10 @@ BOOL APIENTRY OptionsTab_General(
                 }
                 else
                     MessageBox(hWnd, "Failed to register " APPNAME " as your default CD player", APPNAME, MB_OK | MB_ICONERROR);
-            }
+            } else if (LOWORD(wParam) == IDC_TRANS_CHECK) {
+				EnableWindow(GetDlgItem(hWnd,IDC_TRANS_SLIDER),IsDlgButtonChecked(hWnd,IDC_TRANS_CHECK));
+				EnableWindow(GetDlgItem(hWnd,IDC_TRANS_TEXT),IsDlgButtonChecked(hWnd,IDC_TRANS_CHECK));
+			}
         }
         break;
 
@@ -373,6 +400,12 @@ BOOL APIENTRY OptionsTab_General(
                         gs.nOptions |= OPTIONS_AUTOCHECKFORNEWVERSION;
                     else
                         gs.nOptions &= ~OPTIONS_AUTOCHECKFORNEWVERSION;
+
+					if(IsDlgButtonChecked(hWnd,IDC_TRANS_CHECK))
+                        gs.nOptions |= OPTIONS_MENUTRANS;
+                    else
+                        gs.nOptions &= ~OPTIONS_MENUTRANS;
+					gs.nMenuAlpha = SendDlgItemMessage(hWnd,IDC_TRANS_SLIDER,TBM_GETPOS,0,0);
 
                     // Poll time
 
