@@ -1,10 +1,10 @@
 //Microsoft Developer Studio generated resource script.
 //
-#include "resource.h"
+#include "res\resource.h"
 
 // Generated Help ID header file
 #define APSTUDIO_HIDDEN_SYMBOLS
-#include "resource.hm"
+#include "res\resource.hm"
 #undef APSTUDIO_HIDDEN_SYMBOLS
 
 #define APSTUDIO_READONLY_SYMBOLS
@@ -33,20 +33,20 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_MAIN                ICON    DISCARDABLE     "main.ico"
-IDI_NOAUDIO             ICON    DISCARDABLE     "noaudio.ico"
-IDI_PLAY                ICON    DISCARDABLE     "play.ico"
-IDI_PAUSE               ICON    DISCARDABLE     "pause.ico"
-IDI_STOP                ICON    DISCARDABLE     "stop.ico"
-IDI_REMOTE              ICON    DISCARDABLE     "remote.ico"
-IDI_LOCAL               ICON    DISCARDABLE     "local.ico"
+IDI_MAIN                ICON    DISCARDABLE     "res\\main.ico"
+IDI_NOAUDIO             ICON    DISCARDABLE     "res\\noaudio.ico"
+IDI_PLAY                ICON    DISCARDABLE     "res\\play.ico"
+IDI_PAUSE               ICON    DISCARDABLE     "res\\pause.ico"
+IDI_STOP                ICON    DISCARDABLE     "res\\stop.ico"
+IDI_REMOTE              ICON    DISCARDABLE     "res\\remote.ico"
+IDI_LOCAL               ICON    DISCARDABLE     "res\\local.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
 //
 
-IDB_NOTIFY              BITMAP  DISCARDABLE     "ntfy_cd.bmp"
+IDB_NOTIFY              BITMAP  DISCARDABLE     "res\\ntfy_cd.bmp"
 #endif    // Neutral (Default) resources
 /////////////////////////////////////////////////////////////////////////////
 

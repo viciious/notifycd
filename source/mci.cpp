@@ -39,7 +39,7 @@ extern GLOBALSTRUCT gs;
 MCIERROR NotifyMCISendCommand(MCIDEVICEID IDDevice,    
                               UINT uMsg,             
                               DWORD fdwCommand,        
-                              DWORD dwParam)
+                              DWORD_PTR dwParam)
 {
     MCIERROR nErr;
 
@@ -73,13 +73,13 @@ BOOL CDOpen(MCIDEVICEID* lpDeviceID)
 
     sMCIOpen.lpstrDeviceType = (LPCSTR) MCI_DEVTYPE_CD_AUDIO;
     sMCIOpen.lpstrElementName = zDevice;
-    nErr = NotifyMCISendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_SHAREABLE | MCI_OPEN_TYPE_ID | MCI_OPEN_ELEMENT, 
-					      (DWORD) (LPVOID) &sMCIOpen);
+    nErr = NotifyMCISendCommand(0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_SHAREABLE | MCI_OPEN_TYPE_ID | MCI_OPEN_ELEMENT, 
+					      (DWORD_PTR)&sMCIOpen);
     if (nErr) {
 		DebugPrintf("Open non-shared");
 
-        nErr = NotifyMCISendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_ELEMENT, 
-					          (DWORD) (LPVOID) &sMCIOpen);
+        nErr = NotifyMCISendCommand(0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_ELEMENT, 
+					          (DWORD_PTR)&sMCIOpen);
 	    if (nErr) {
 		    char zError[256];
 
@@ -300,7 +300,7 @@ void CDStop(MCIDEVICEID wDeviceID)
 {
 	DebugPrintf("CDStop()");
 
-	NotifyMCISendCommand(wDeviceID, MCI_STOP, NULL, NULL);
+	NotifyMCISendCommand(wDeviceID, MCI_STOP, 0, (DWORD_PTR )NULL);
 
     gs.di[0].nCurrTrack = 0;
 
@@ -313,7 +313,7 @@ void CDPause(MCIDEVICEID wDeviceID)
 {
 	DebugPrintf("CDPause()");
 
-	NotifyMCISendCommand (wDeviceID, MCI_PAUSE, NULL, NULL);
+	NotifyMCISendCommand (wDeviceID, MCI_PAUSE, 0, (DWORD_PTR)NULL);
 
 	gs.state.bPaused = TRUE;
     gs.state.bPlaying = FALSE;

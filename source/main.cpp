@@ -26,9 +26,27 @@
 
 #include "common.h"
 
+#ifdef __GNUC__
+# define NOSHFOLDER_HEADER
+#endif
+
 #include <commctrl.h>
 #include <shellapi.h>
 #include <dbt.h>
+
+#ifndef NOSHFOLDER_HEADER
+#include <shfolder.h>
+#endif
+
+#ifndef CSIDL_APPDATA
+#define CSIDL_APPDATA                   0x001A
+#endif
+
+#ifndef SHGetFolderPath
+extern "C" {
+	HRESULT (*SHGetFolderPath) (HWND, int, HANDLE, DWORD, LPSTR);
+}
+#endif
 
 #include "res/resource.h"
 
@@ -597,7 +615,7 @@ BOOL CALLBACK AboutDlgProc(
                 return (int)GetStockObject(HOLLOW_BRUSH);
             }
 
-            return NULL;
+            return FALSE;
         }
         break;
 
@@ -2385,21 +2403,25 @@ void HandleCommandLine(LPSTR lpCmdLine,
     }
 }
 
-
+#if 0
 LONG WINAPI TopLevelExHandler(LPEXCEPTION_POINTERS lpex)
 {
     TCHAR szErrorMsg[256];
     
+#ifndef __GNUC__
 	__try {
+#endif
         DebugPrintf("**** EXCEPTION CAUGHT ***");
         DebugPrintf("ExceptionCode: %08X", lpex->ExceptionRecord->ExceptionCode);
         DebugPrintf("ExceptionAddress: %08X", lpex->ExceptionRecord->ExceptionAddress);
 
         sprintf(szErrorMsg, APPNAME " caused an exception 0x%08X at 0x%08X. " APPNAME " will terminate!", 
             lpex->ExceptionRecord->ExceptionCode, lpex->ExceptionRecord->ExceptionAddress);
-    } 
+#ifndef __GNUC__            
+    }
     __except (TRUE) {
 	} // __try
+#endif
 
     MessageBox(NULL, szErrorMsg, APPNAME, MB_OK | MB_ICONSTOP);
 
@@ -2409,7 +2431,30 @@ LONG WINAPI TopLevelExHandler(LPEXCEPTION_POINTERS lpex)
 
     return NO_ERROR;
 }
+#endif
 
+extern "C" {
+static void GetProfilePath (void)
+{
+#ifndef SHGetFolderPath
+	HINSTANCE shFolderDll = LoadLibrary( "shfolder.dll" );
+
+    if( !shFolderDll )
+	    shFolderDll = LoadLibrary( "shell32.dll" );
+                
+	SHGetFolderPath = (HRESULT (*) (HWND, int, HANDLE, DWORD, LPSTR))GetProcAddress( shFolderDll, "SHGetFolderPathA" );
+	if( SHGetFolderPath )
+		SHGetFolderPath( NULL, CSIDL_APPDATA, 0, 0, gs.szProfilePath );
+
+	FreeLibrary( shFolderDll );
+#else
+    SHGetFolderPath( 0, CSIDL_APPDATA, 0, 0, gs.szProfilePath );
+#endif
+
+    if (!gs.szProfilePath[0])
+        GetWindowsDirectory( gs.szProfilePath, MAX_PATH );
+}
+}
 
 int WINAPI WinMain(
     HINSTANCE hInstance,
@@ -2424,18 +2469,31 @@ int WINAPI WinMain(
 	unsigned int nFoundTrack = 1;
     unsigned int nFoundDevice = 0xFFFFFFFF;
     unsigned int nLoop;   
+	FILE *fProfile;
+	BOOL bNoProfileYet;
 
-//    SetUnhandledExceptionFilter(TopLevelExHandler);
+#if 0
+    SetUnhandledExceptionFilter(TopLevelExHandler);
+#endif
 
     gs.sVersionInfo.dwOSVersionInfoSize = sizeof(gs.sVersionInfo);
     GetVersionEx(&gs.sVersionInfo);
 
-	GetWindowsDirectory( gs.szProfilePath, MAX_PATH );
+    gs.szProfilePath[0] = 0;
+    
+	GetProfilePath ();
 
 	if( gs.szProfilePath[strlen(gs.szProfilePath) - 1] == '\\' )
         StringCatZ( gs.szProfilePath, PROFILENAME, sizeof(gs.szProfilePath) );
 	else
         StringCatZ( gs.szProfilePath, "\\" PROFILENAME, sizeof(gs.szProfilePath) );
+	
+	bNoProfileYet = FALSE;
+	fProfile = fopen (gs.szProfilePath, "r");
+	if (!fProfile)
+		bNoProfileYet = TRUE;
+	else
+		fclose (fProfile);
 
 	srand((unsigned)time(NULL));
 
@@ -2601,7 +2659,9 @@ int WINAPI WinMain(
 
     DBInit();
 
-	if (strstr(lpCmdLine, "-SETUP")) {
+	if (bNoProfileYet)
+		DoSetup ();
+	else if (strstr(lpCmdLine, "-SETUP")) {
         DoSetup ();
 		return 0;
 	}
@@ -2630,7 +2690,6 @@ int WINAPI WinMain(
     gs.hMainWnd = CreateWindow("NOTIFY_CD_CLASS", 
                             APPNAME, 
                             WS_POPUP/* | WS_VISIBLE | WS_CAPTION*/,
-                            , 
                             0, 0,
                             200, 200,
                             NULL,

@@ -26,7 +26,7 @@
 MCIERROR NotifyMCISendCommand(MCIDEVICEID IDDevice,    
                               UINT uMsg,             
                               DWORD fdwCommand,        
-                              DWORD dwParam);
+                              DWORD_PTR dwParam);
 
 BOOL CDOpen(MCIDEVICEID* lpDeviceID);
 void CDClose(MCIDEVICEID* lpDeviceID);
@@ -76,3 +76,4 @@ void CDGetAbsoluteTrackPos(MCIDEVICEID wDeviceID,
 						   unsigned int* pnSec);
 
 #endif //__MCI_H__
+

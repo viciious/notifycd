@@ -46,3 +46,4 @@ BOOL DBIsEnd();
 BOOL DBGetDBID(char* pzID, DISCINFO* psDI);
 
 #endif //__DB_H__
+

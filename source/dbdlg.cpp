@@ -682,7 +682,7 @@ BOOL Search(HWND hWnd,
 	else if (nType == 1) {
 		char* pzTmpString;
 		sArtist* psArtist;
-		sCD* psCD;
+		sCD* psCD = NULL;
 
 		nLastSearchType = nType;
 		if (bFirst)
@@ -743,7 +743,7 @@ BOOL Search(HWND hWnd,
 	else if (nType == 2) {
 		char* pzTmpString;
 		sArtist* psArtist;
-		sCD* psCD;
+		sCD* psCD = NULL;
 		unsigned int nLoop;
 
 		nLastSearchType = nType;
@@ -1041,7 +1041,7 @@ BOOL DBEditorNotifyHandler(HWND hWnd, UINT /*nMsg*/, WPARAM wParam, LPARAM lPara
 
                     if (psKeyDown->wVKey == VK_F2) {
                         if (ListView_GetSelectedCount(GetDlgItem(hWnd, IDC_LIST))) {
-                            int nItem = ListView_GetNextItem(GetDlgItem(hWnd, IDC_LIST), -1, LVNI_ALL | LVNI_SELECTED);
+                            int nItem = ListView_GetNextItem(GetDlgItem(hWnd, IDC_LIST), (WPARAM)-1, LVNI_ALL | LVNI_SELECTED);
 
                             ListView_EditLabel(GetDlgItem(hWnd, IDC_LIST), nItem);
                         }

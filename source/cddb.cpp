@@ -405,7 +405,7 @@ void ParseEntry(DISCINFO* psDI, char* pzData, DWORD dwSize)
             while(pzStr[nStrPos] == ' ' || pzStr[nStrPos] == '\t')
                 nStrPos ++;
 
-            if (isdigit(pzStr[nStrPos])) {
+            if (pzStr[nStrPos] >= '0' && pzStr[nStrPos] <= '9') {
 				unsigned int *pnOldFrames = psDI->pnFrames;
 				psDI->pnFrames = new unsigned int[nCollectedTrackFrames + 1];
                 if( pnOldFrames ) {
@@ -1236,9 +1236,10 @@ BOOL OpenConnection(SOCKET* pnSocket,
         }
 
 	    if (connect(*pnSocket, (struct sockaddr*)&sAddrServer, sizeof(sAddrServer))) {
+	        int err = WSAGetLastError();
 		    MessageBox(NULL, "Failed to connect to remote server!", APPNAME, MB_OK | MB_ICONERROR);
 
-		    DebugPrintf("connect() failed %d", WSAGetLastError());
+		    DebugPrintf("connect() failed %d", err);
 
 			CloseConnection(pnSocket, pbCDDBConnected);
 		    return FALSE;
@@ -1297,9 +1298,10 @@ BOOL OpenConnection(SOCKET* pnSocket,
 		sAddrServer.sin_family = AF_INET;
 
 		if (connect(*pnSocket, (struct sockaddr*)&sAddrServer, sizeof(sAddrServer))) {
+		    int err = WSAGetLastError();
 			MessageBox(NULL, "Failed to connect to remote server!", APPNAME, MB_OK | MB_ICONERROR);
 
-			DebugPrintf("connect() failed %d", WSAGetLastError());
+			DebugPrintf("connect() failed %d", err);
 
 			CloseConnection(pnSocket, pbCDDBConnected);
 			return FALSE;
@@ -2369,9 +2371,10 @@ void InternetSend(MCIDEVICEID wDeviceID,
     sAddrServer.sin_port = htons((short)25);
     sAddrServer.sin_addr.s_addr = GetAddress(gs.cddb.zRemoteEmailServer);
     if (sAddrServer.sin_addr.s_addr == INADDR_NONE) {
+        int err = WSAGetLastError();
 		MessageBox(hWnd, "Could not resolve remote server name!", APPNAME, MB_OK | MB_ICONERROR);
 
-        DebugPrintf("GetAddress() failed %d", WSAGetLastError());
+        DebugPrintf("GetAddress() failed %d", err);
 
 		s = INVALID_SOCKET;
         shutdown(s, 0);
@@ -2380,9 +2383,11 @@ void InternetSend(MCIDEVICEID wDeviceID,
     }
     
     if (connect(s, (struct sockaddr*)&sAddrServer, sizeof(sAddrServer))) {
+        int err = WSAGetLastError();
+                
         MessageBox(hWnd, "Failed to connect to remote server!", APPNAME, MB_OK | MB_ICONERROR);
 
-        DebugPrintf("connect() failed %d", WSAGetLastError());
+        DebugPrintf("connect() failed %d", err);
 
 		s = INVALID_SOCKET;
         shutdown(s, 0);

@@ -197,7 +197,7 @@ SOURCE=.\res\noaudio.ico
 # End Source File
 # Begin Source File
 
-SOURCE=.\res\ntfy_cd.rc
+SOURCE=.\ntfy_cd.rc
 # End Source File
 # Begin Source File
 

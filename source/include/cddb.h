@@ -55,3 +55,4 @@ BOOL CDDBScanFiles(DISCINFO* psDI, int mode);
 BOOL CDDBQuerySites();
 
 #endif //__CDDB_H__
+

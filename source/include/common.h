@@ -39,4 +39,13 @@
 #include <commdlg.h>
 #include <winsock.h>
 
+#ifdef __GNUC__
+typedef struct {
+    NMHDR hdr;
+    WORD wVKey;
+    UINT flags;
+} NMTVKEYDOWN, NMLVKEYDOWN;
+#endif
+
 #endif //__PRE_H__
+

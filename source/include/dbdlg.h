@@ -30,3 +30,4 @@ BOOL CALLBACK DatabaseDlgProc(
     LPARAM  lParam);
 
 #endif //__DBDLG_H__
+

@@ -553,9 +553,10 @@ DebugPrintf("-> InitTracksMenu");
         }
 
         if (psDI->nProgrammedTracks < gs.nMenuBreak || (gs.nOptions & OPTIONS_NOMENUBREAK)) {
+            unsigned int nLoop;
             gs.bBrokenTracksMenu = FALSE;
 
-            for (unsigned int nLoop = 0 ; nLoop < psDI->nProgrammedTracks ; nLoop ++) {
+            for (nLoop = 0 ; nLoop < psDI->nProgrammedTracks ; nLoop ++) {
                 sprintf(szTmp, "%d. %s", psDI->pnProgrammedTracks[nLoop]+1, psDI->ppzTracks[psDI->pnProgrammedTracks[nLoop]]);
 
 			    CheckAmpersand(szTmp, FALSE);
@@ -570,7 +571,7 @@ DebugPrintf("-> InitTracksMenu");
                     sprintf(szTmp, "[%s]", psDI->ppzTrackLen[psDI->pnProgrammedTracks[nLoop]]);
 			        CheckAmpersand(szTmp, FALSE);
                     if (!nLoop && (gs.nOptions & OPTIONS_TRACKSMENUCOLUMN))
-                        AppendMenu(GetSubMenu(gs.hTrackMenu, 0), MF_MENUBREAK | MF_STRING, IDM_TRACKS+nLoop, szTmp);
+                        AppendMenu(GetSubMenu(gs.hTrackMenu, 0), MF_MENUBREAK | MF_STRING, IDM_TRACKS, szTmp);
                     else
                         InsertMenu(hTracksMenu, 0xFFFFFFFF, MF_BYPOSITION | MF_STRING, IDM_TRACKS+nLoop, szTmp);
                 }
@@ -1199,7 +1200,9 @@ void ParseServerInfo(CDDB_SERVER* psServer, char* pzStr)
     char* pzPtr;
     char* pzPos = pzStr;
 
+#ifndef __GNUC__
     __try {
+#endif
         pzPtr = strchr(pzPos, ' ');
         *pzPtr = 0;
         strcpy(psServer->zSite, pzPos);
@@ -1231,9 +1234,11 @@ void ParseServerInfo(CDDB_SERVER* psServer, char* pzStr)
         pzPos = pzPtr + 1;
 
         strcpy(psServer->zDescription, pzPos);
+#ifndef __GNUC__        
     }
     __except(TRUE) {
     }
+#endif
 }
 
 unsigned int CDGetLastTrackInARow(unsigned int nTrack)

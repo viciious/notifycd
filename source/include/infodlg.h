@@ -35,3 +35,4 @@ struct INFODLGPARAM {
 };
 
 #endif //__INFODLG_H__
+

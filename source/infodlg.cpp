@@ -91,7 +91,7 @@ BOOL InfoDlgNotifyHandler(HWND hWnd, UINT /*nMsg*/, WPARAM wParam, LPARAM lParam
                     }
                     else {
                         unsigned int nCurSel;
-                        unsigned int nID;
+                        unsigned int nID = 0;
                         HWND hTab;
 						INFODLGPARAM* psParam = (INFODLGPARAM*)GetWindowLong(hWnd, GWL_USERDATA);
 						DISCINFO* psDI = NULL;
@@ -663,7 +663,7 @@ BOOL CALLBACK InfoDlgProc(
     LPARAM  lParam)
 {
 	INFODLGPARAM* psParam = (INFODLGPARAM*)GetWindowLong(hWnd, GWL_USERDATA);
-    DISCINFO* psDI;
+    DISCINFO* psDI = NULL;
 
     if (psParam)
         psDI = psParam->psDI;

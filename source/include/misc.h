@@ -120,3 +120,4 @@ void ResetPlaylist(DISCINFO* psDI, BOOL bProgram);
 void DiscInit(DISCINFO* psDI);
 
 #endif //__MISC_H__
+
