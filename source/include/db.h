@@ -24,7 +24,7 @@
 #define __DB_H__
 
 BOOL DBSave(DISCINFO* psDI);
-BOOL DBInternetGet(DISCINFO* psDI, HWND hWnd);
+int DBInternetGet(DISCINFO* psDI, HWND hWnd);
 void DBInternetSend(DISCINFO* psDI, HWND hWnd);
 void DBGetDiscID(MCIDEVICEID wDeviceID, 
                  DISCINFO* psDI);

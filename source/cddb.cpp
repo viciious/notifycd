@@ -61,7 +61,7 @@ BOOL VerifyResult(SOCKET* pnSocket,
 				  unsigned int nCodes, ...);
 
 // Wrappers for the query functions
-BOOL QueryRemote(DISCINFO* psDI,
+int QueryRemote(DISCINFO* psDI,
 				 BOOL* pbServerError);
 
 char azCategories[][32] = {"blues",
@@ -1559,15 +1559,18 @@ BOOL CloseConnection(SOCKET* pnSocket,
 // Query the remote server for a disc
 //
 /////////////////////////////////////////////////////////////
-BOOL CDDBQueryRemote(DISCINFO* psDI,
+int CDDBQueryRemote(DISCINFO* psDI,
 					 BOOL bManual,
 					 BOOL* pbServerError)
 {
+	int nDBState;
+
     if (!bDBInEditor) {
         hCDDBTrayIcon = hIconLocal;
         NotifyAdd(gs.hMainWnd, 200, hCDDBTrayIcon, APPNAME " - Query");
     }
     
+	nDBState = 0;
     psDI->bDiscFound = FALSE;
 
 	*pbServerError = FALSE;
@@ -1591,7 +1594,8 @@ BOOL CDDBQueryRemote(DISCINFO* psDI,
 			DebugPrintf("WSAStartup() failed!");
 		}
 		else {
-			if (QueryRemote(psDI, pbServerError))
+			nDBState = QueryRemote(psDI, pbServerError);
+			if (nDBState == 1)
 				psDI->bDiscFound = TRUE;
 			
 			WSACleanup();
@@ -1616,11 +1620,13 @@ BOOL CDDBQueryRemote(DISCINFO* psDI,
     else
         FixEntry(psDI);
 
-	return psDI->bDiscFound;
+	return nDBState;
 }
 
-
-BOOL QueryRemote(DISCINFO* psDI,
+// -1 - several entries found, none selected
+// 0 - not found
+// 1 - found
+int QueryRemote(DISCINFO* psDI,
 				 BOOL* pbServerError)
 {
     char zStr[8192];
@@ -1673,12 +1679,12 @@ BOOL QueryRemote(DISCINFO* psDI,
     NotifyModify(gs.hMainWnd, 200, hCDDBTrayIcon, APPNAME " - Connecting...");
 
 	if (!SendCommand(&nSocket, &bConnected, TRUE, NULL, zStr, sizeof(zStr)))
-		return FALSE;
+		return 0;
 	if (!VerifyResult(&nSocket, &bConnected, zStr, 2, "200", "201")) {
 		DebugPrintf("Remote server denies clients for the moment");
 		MessageBox(NULL, "Remote server denies clients for the moment", APPNAME, MB_OK | MB_ICONERROR);
 
-		return FALSE;
+		return 0;
 	}
 
     /////////////////////////////////////////////////////////////
@@ -1688,9 +1694,9 @@ BOOL QueryRemote(DISCINFO* psDI,
     /////////////////////////////////////////////////////////////
 
 	if (!SendCommand(&nSocket, &bConnected, TRUE, "proto 3", zStr, sizeof(zStr)))
-		return FALSE;
+		return 0;
 	if (!VerifyResult(&nSocket, &bConnected, zStr, 1, "201"))
-		return FALSE;
+		return 0;
 
     /////////////////////////////////////////////////////////////
     //
@@ -1708,10 +1714,10 @@ BOOL QueryRemote(DISCINFO* psDI,
 			if (gs.cddb.nCDDBOptions & OPTIONS_CDDB_ASKFORPASSWORD)
 				gs.cddb.zProxyPassword[0] = 0;
 
-			return FALSE;
+			return 0;
 		}
 		if (!VerifyResult(&nSocket, &bConnected, zStr, 1, "210"))
-			return FALSE;
+			return 0;
 
 		pzMOTD = NULL;
 
@@ -1727,7 +1733,7 @@ BOOL QueryRemote(DISCINFO* psDI,
 		bEnd = FALSE;
 		while(!bEnd) {
 			if (!GetResult(&nSocket, &bConnected, zStr, sizeof(zStr)))
-				return FALSE;
+				return 0;
 
 			while (zStr[strlen(zStr)-1] == '\n' || zStr[strlen(zStr)-1] == '\r')
 				zStr[strlen(zStr)-1] = 0;
@@ -1760,10 +1766,10 @@ BOOL QueryRemote(DISCINFO* psDI,
 		if (gs.cddb.nCDDBOptions & OPTIONS_CDDB_ASKFORPASSWORD)
 			gs.cddb.zProxyPassword[0] = 0;
 
-		return FALSE;
+		return 0;
 	}
 	if (!VerifyResult(&nSocket, &bConnected, zStr, 3, "200", "202", "211"))
-		return FALSE;
+		return 0;
 
 	//
 	// Get query result
@@ -1779,7 +1785,7 @@ BOOL QueryRemote(DISCINFO* psDI,
 
 		CloseConnection(&nSocket, &bConnected);
 
-		return FALSE;
+		return 0;
 	}
 	if (!strncmp(zStr, "211", 3)) {
 		DebugPrintf("No exact match! Building list!", WSAGetLastError());
@@ -1789,7 +1795,10 @@ BOOL QueryRemote(DISCINFO* psDI,
 		bEnd = FALSE;
 		while(!bEnd) {
 			if (!GetResult(&nSocket, &bConnected, zStr, sizeof(zStr)))
-				return FALSE;
+			{
+				delete poRemoteList;
+				return 0;
+			}
 
 			while(zStr[strlen(zStr)-1] == '\n' || zStr[strlen(zStr)-1] == '\r')
 				zStr[strlen(zStr)-1] = 0;
@@ -1825,7 +1834,7 @@ BOOL QueryRemote(DISCINFO* psDI,
 
 			delete poRemoteList;
 
-			return FALSE;
+			return -1;
 		}
 
 		strcpy(zCategory, psRemoteChoise->zCategory);
@@ -1859,16 +1868,16 @@ BOOL QueryRemote(DISCINFO* psDI,
 	sprintf(zCmd, "cddb read %s %s", zCategory, zTmp);
 
 	if (!SendCommand(&nSocket, &bConnected, FALSE, zCmd, zStr, sizeof(zStr)))
-		return FALSE;
+		return 0;
 	if (!VerifyResult(&nSocket, &bConnected, zStr, 1, "210"))
-		return FALSE;
+		return 0;
 
 	bEnd = FALSE;
 	while(!bEnd) {
 		if (!GetResult(&nSocket, &bConnected, zStr, sizeof(zStr))) {
 			if( pzEntry )
 		        delete[] pzEntry;
-			return FALSE;
+			return 0;
 		}
 
 		while(zStr[strlen(zStr)-1] == '\n' || zStr[strlen(zStr)-1] == '\r')
@@ -1912,7 +1921,7 @@ BOOL QueryRemote(DISCINFO* psDI,
     
 	*pbServerError = FALSE;
 
-	return TRUE;
+	return 1;
 }
 
 
@@ -2145,20 +2154,17 @@ void CDDBGetDiscID(MCIDEVICEID wDeviceID,
 
 BOOL bIsEnd = FALSE;
 
-BOOL CDDBInternetGet(DISCINFO* psDI, HWND hWnd)
+int CDDBInternetGet(DISCINFO* psDI, HWND hWnd)
 {
 	BOOL bServerError;
 
     if (!gs.cddb.zRemoteServer[0] || !gs.cddb.nRemotePort) {
 		MessageBox(hWnd, "You must configure a remote server to use this function!", APPNAME, MB_OK | MB_ICONINFORMATION);
-        return FALSE;
+        return 0;
     }
 
     // Do a remote query!
-
-    CDDBQueryRemote(psDI, TRUE, &bServerError);
-
-    return psDI->bDiscFound;
+    return CDDBQueryRemote(psDI, TRUE, &bServerError);
 }
 
 

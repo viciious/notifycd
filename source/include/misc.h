@@ -34,6 +34,8 @@ void StringCatZ( char *pzDest, const char *pzSrc, size_t size );
 void StringPrintf( char *pzDest, size_t size, const char *pzFmt, ... );
 char *StringCopy( const char *pzStr );
 
+void Notify_CreatePath( const char *path );
+
 void UpdateTooltipOrCaption(DISCINFO* psDI,
 							BOOL bTooltipOrCaption, 
 							char* pzStr);

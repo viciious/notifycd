@@ -33,7 +33,7 @@ void CDDBFree();
 void CDDBGetDiscID(MCIDEVICEID wDeviceID,
                    DISCINFO* psDI);
 BOOL CDDBQueryLocal(DISCINFO* psDI);
-BOOL CDDBQueryRemote(DISCINFO* psDI,
+int CDDBQueryRemote(DISCINFO* psDI,
 					 BOOL bManual,
 					 BOOL* pbServerError);
 

@@ -793,6 +793,7 @@ BOOL CALLBACK InfoDlgProc(
 				    break;
 
                     case IDM_INTERNETGET: {
+						int nDBState;
                         DISCINFO sQueryDI;
 
 					    EnterCriticalSection(&gs.sDiscInfoLock);
@@ -806,7 +807,8 @@ BOOL CALLBACK InfoDlgProc(
                         CopyMemory(sQueryDI.pnFrames, psDI->pnFrames, psDI->nMCITracks*sizeof(unsigned int));
                         sQueryDI.nDiscLength = psDI->nDiscLength;
 
-                        if (DBInternetGet(&sQueryDI, hWnd)) {
+						nDBState = DBInternetGet(&sQueryDI, hWnd);
+                        if (nDBState == 1) {
                             GetDiscInfo(gs.wDeviceID, &sQueryDI);
                             ValidateDiscInfo(gs.wDeviceID, &sQueryDI);
 
@@ -816,7 +818,7 @@ BOOL CALLBACK InfoDlgProc(
 
                             InitInfoDlg(hWnd, psDI, FALSE);
                         }
-                        else {
+                        else if (nDBState == 0) {
                             MessageBox(hWnd, "No disc info found on remote server", APPNAME, MB_OK | MB_ICONINFORMATION);
                         }
 

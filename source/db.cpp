@@ -145,14 +145,17 @@ BOOL DBSave(DISCINFO* psDI)
 }
 
 
-BOOL DBInternetGet(DISCINFO* psDI, HWND hWnd)
+int DBInternetGet(DISCINFO* psDI, HWND hWnd)
 {
-    if (CDDBInternetGet(psDI, hWnd))
+	int nDBState;
+
+	nDBState = CDDBInternetGet(psDI, hWnd);
+    if (nDBState == 1)
         bFoundInRemoteCDDB = TRUE;
     else
         bFoundInRemoteCDDB = FALSE;
 
-    return bFoundInRemoteCDDB;
+    return nDBState;
 }
 
 

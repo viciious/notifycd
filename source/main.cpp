@@ -535,7 +535,7 @@ BOOL CALLBACK CreditsDlgProc(
     switch(nMsg) {
     	case WM_INITDIALOG: {
             CenterWindow(hWnd);
-            
+			SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)LoadIcon(gs.hMainInstance,MAKEINTRESOURCE(IDI_MAIN)));
             SetWindowText(GetDlgItem(hWnd, IDC_CREDITS), szCredits);
         }
 		break;
@@ -577,6 +577,7 @@ BOOL CALLBACK AboutDlgProc(
             gs.bInAboutDlg = TRUE;
 
             CenterWindow(hWnd);
+			SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)LoadIcon(gs.hMainInstance,MAKEINTRESOURCE(IDI_MAIN)));
 
             sprintf(szStr, "About %s", APPNAME);
             SetWindowText(hWnd, szStr);
@@ -1438,11 +1439,13 @@ LRESULT CALLBACK MainWindowProc(
 
                     case IDM_INTERNETGET: {
                         if (gs.state.bInit) {
+							int nDBState;
                             DISCINFO sQueryDI;
 
                             CopyQueryInfo(&gs.di[0], &sQueryDI);
 
-                            if (DBInternetGet(&sQueryDI, hWnd)) {
+							nDBState = DBInternetGet(&sQueryDI, hWnd);
+                            if (nDBState == 1) {
                                 GetDiscInfo(gs.wDeviceID, &sQueryDI);
                                 SetDiscInfo(&sQueryDI);
 
@@ -1458,7 +1461,7 @@ LRESULT CALLBACK MainWindowProc(
 
                                 LeaveCriticalSection(&gs.sDiscInfoLock);
                             }
-                            else
+                            else if (nDBState == 0)
                                 MessageBox(hWnd, "No disc info found on remote server", APPNAME, MB_OK | MB_ICONINFORMATION);
                         }
                         else
