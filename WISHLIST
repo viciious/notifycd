@@ -1,0 +1,17 @@
+* Wrap CD titles in the menu, or truncate them.  You might have a "wrap at ..." or 
+  "truncate at ..." option in the Options panel where the user could specify the number of characters (or pixels?). 
+
+* Query local database in the Internet DB popup menu or something
+
+* Use WinINet functions!
+
+* Option to mute system sounds when disc is playing. 
+
+* If Notify CD can include the function of controlling CD volume, it'll be
+  excellent! auxSetVolume...
+
+* Perhaps one should add a -PLAYORPAUSE so you can toggle 
+  it. -PAUSE which toggles in normal cases, doesnt work so well at 
+  first instance.
+
+* Multidisc play (Random etc)

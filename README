@@ -1,0 +1,44 @@
+    --- 0. Legal stuff ----------------------------
+
+    Notify CD Player for Windows NT and Windows 95
+
+    Copyright (c) 1996-1998, Mats Ljungqvist (mlt@cyberdude.com)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+    --- 1. Information ----------------------------
+
+    This Notify CD Player source code release is provided AS IS and 
+    it compiled just fine using Microsoft Visual C++ 5.0 when it was 
+    released. The code also, usually, passes Bounds Checker without
+    too much complaints.
+
+    The code might not be the nicest you've seen, but it hould be 
+    considered that this project started as a small hack to provide 
+    a fast way to pause/restart the disc when someone with a tie
+    entered the office... and I sure didn't plan on releasing the code!
+
+    If you CHANGE anything or ADD anything, please send me a copy
+    of the changes and I might add them to the general distribution.
+
+    Also, please contact me before you make enhancements that you think 
+    should be incorporated in the general release for a discussion 
+    about it.
+
+    Latest source code should be available at 
+    http://www.artech.se/~mlt/software/src/
+
+    Regards,
+    Mats
