@@ -244,11 +244,11 @@ void UpdateMenu(DISCINFO* psDI, HMENU hMenu)
         EnableMenuItem(hMenu, IDM_SETABSTRACKPOS, MF_BYCOMMAND | MF_ENABLED);
         EnableMenuItem(hMenu, IDM_SKIP, MF_BYCOMMAND | MF_ENABLED);
 
-        if (!gs.state.bPlayWhole && !gs.bInInfoDlg)
+        if (!gs.state.bPlayWhole && !gs.bInInfoDlg && !gs.bInDBDlg)
             EnableMenuItem(hMenu, IDM_INFO, MF_BYCOMMAND | MF_ENABLED);
         else
             EnableMenuItem(hMenu, IDM_INFO, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-        if (!gs.bInDBDlg)
+        if (!gs.bInDBDlg && !gs.bInInfoDlg)
             EnableMenuItem(hMenu, IDM_DB, MF_BYCOMMAND | MF_ENABLED);
         else
             EnableMenuItem(hMenu, IDM_DB, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);

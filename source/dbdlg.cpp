@@ -1353,7 +1353,7 @@ BOOL CALLBACK DatabaseDlgProc(
                         sParam.psDI = &psCD->sDI;
                         sParam.bSave = FALSE;
 
-                        if (DialogBoxParam(gs.hMainInstance, MAKEINTRESOURCE(IDD_INFO), NULL, (DLGPROC)InfoDlgProc, (LPARAM)&sParam) == IDOK) {
+                        if (DialogBoxParam(gs.hMainInstance, MAKEINTRESOURCE(IDD_INFO), hWnd, (DLGPROC)InfoDlgProc, (LPARAM)&sParam) == IDOK) {
                             ListView_RedrawItems(GetDlgItem(hWnd, IDC_LIST), 0, 128);
 
                             psCD->bChanged = TRUE;
