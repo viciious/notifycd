@@ -1042,7 +1042,7 @@ BOOL CDDBScanFiles(DISCINFO* psDI, int mode)
 		DebugPrintf( "Unix format" );
 
 		if( mode == MODE_CDDB_SAVE || mode == MODE_CDDB_DELETE ) {
-			StringPrintf( zPath, sizeof(zPath), "%s%s", gs.cddb.zCDDBPath, psDI->pzCategory );
+			StringPrintf( zPath, sizeof(zPath), "%s%s\\", gs.cddb.zCDDBPath, psDI->pzCategory );
 			CreateDirectory( zPath, NULL );
 			StringCatZ( zPath, psDI->zCDDBID, sizeof(zPath));
 
