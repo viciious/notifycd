@@ -1615,30 +1615,33 @@ LRESULT CALLBACK MainWindowProc(
             DRAWITEMSTRUCT* psI = (DRAWITEMSTRUCT*) lParam;
             if (psI->itemID == 999 && psI->itemAction == ODA_DRAWENTIRE) {
                 HWND hMenuWnd = WindowFromDC(psI->hDC);
-                RECT sRect;
+				if (IsWindow (hMenuWnd))
+				{
+					RECT sRect;
 
-                GetClientRect(hMenuWnd, &sRect);
+					GetClientRect(hMenuWnd, &sRect);
 
-                // TEMP
+					// TEMP
 
-                HDC hDC = CreateCompatibleDC(psI->hDC);
-                gs.hMenuBitmap = (HBITMAP)SelectObject(hDC, gs.hMenuBitmap);
+					HDC hDC = CreateCompatibleDC(psI->hDC);
+					gs.hMenuBitmap = (HBITMAP)SelectObject(hDC, gs.hMenuBitmap);
 
-                psI->rcItem.bottom = (sRect.bottom - sRect.top);
-                BitBlt(psI->hDC, psI->rcItem.left, psI->rcItem.bottom - 330, 26, 330, hDC, 0, 0, SRCCOPY);
-                RealizePalette(psI->hDC);
+					psI->rcItem.bottom = (sRect.bottom - sRect.top);
+					BitBlt(psI->hDC, psI->rcItem.left, psI->rcItem.bottom - 330, 26, 330, hDC, 0, 0, SRCCOPY);
+					RealizePalette(psI->hDC);
 
-                if (psI->rcItem.bottom - 330 > 0) {
-                    psI->rcItem.top = 0;
-                    psI->rcItem.bottom = 330 - psI->rcItem.bottom;
+					if (psI->rcItem.bottom - 330 > 0) {
+						psI->rcItem.top = 0;
+						psI->rcItem.bottom = 330 - psI->rcItem.bottom;
 
-                    FillRect(psI->hDC, &psI->rcItem, (HBRUSH)GetStockObject(BLACK_BRUSH));
-                }
+						FillRect(psI->hDC, &psI->rcItem, (HBRUSH)GetStockObject(BLACK_BRUSH));
+					}
 
-                gs.hMenuBitmap = (HBITMAP)SelectObject(hDC, gs.hMenuBitmap);
-                DeleteDC(hDC);
+					gs.hMenuBitmap = (HBITMAP)SelectObject(hDC, gs.hMenuBitmap);
+					DeleteDC(hDC);
 
-                return TRUE;
+					return TRUE;
+				}
             }
         }
         break;
