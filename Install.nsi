@@ -1,70 +1,68 @@
-;NSIS Modern User Interface version 1.63
-;Basic Example Script
+;NSIS Modern User Interface version 1.70
+;Start Menu Folder Selection Example Script
 ;Written by Joost Verburg
 
 !define PRODUCT_CLASS "NCDP"
 !define VER_MAJOR "1"
 !define VER_MINOR "60 beta 5"
-!define MUI_PRODUCT "Notify CD Player" ;Define your own software name here
-!define MUI_VERSION "${VER_MAJOR}.${VER_MINOR}" ;Define your own software version here
-
-!include "MUI.nsh"
+!define PRODUCT "Notify CD Player" ;Define your own software name here
+!define VERSION "${VER_MAJOR}.${VER_MINOR}" ;Define your own software version here
 
 ;--------------------------------
-;Configuration
+;Include Modern UI
 
-  ;General
+  !include "MUI.nsh"
+
+;--------------------------------
+;General
+
+  ;LZMA compression
+  SetCompressor lzma
+
+  ;Name and file
+  Name "${PRODUCT} ${VERSION}"
   OutFile "NCDSetup.exe"
 
-  ;Folder selection page
-  InstallDir "$PROGRAMFILES\${MUI_PRODUCT}"
+  ;Default installation folder
+  InstallDir "$PROGRAMFILES\${PRODUCT}"
   
-  ;Remember install folder
-  InstallDirRegKey HKCU "Software\${MUI_PRODUCT}" ""
-
-  ;$9 is being used to store the Start Menu Folder.
-  ;Do not use this variable in your script (or Push/Pop it)!
-
-  ;To change this variable, use MUI_STARTMENUPAGE_VARIABLE.
-  ;Have a look at the Readme for info about other options (default folder,
-  ;registry).
-
-  ;Remember the Start Menu Folder
-  !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
-  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${MUI_PRODUCT}" 
-  !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
-
-  !define TEMP $R0
+  ;Get installation folder from registry if available
+  InstallDirRegKey HKCU "Software\${PRODUCT}" ""
 
 ;--------------------------------
-;Modern UI Configuration
+;Variables
 
-  !define MUI_LICENSEPAGE
-;  !define MUI_COMPONENTSPAGE
-  !define MUI_DIRECTORYPAGE
-  !define MUI_STARTMENUPAGE
-  
+  Var MUI_TEMP
+  Var STARTMENU_FOLDER
+
+;--------------------------------
+;Interface Settings
+
   !define MUI_ABORTWARNING
+
+;--------------------------------
+;Pages
+
+  !insertmacro MUI_PAGE_LICENSE ".\GNU"
+  !insertmacro MUI_PAGE_DIRECTORY
   
-  !define MUI_UNINSTALLER
-  !define MUI_UNCONFIRMPAGE
+  ;Start Menu Folder Page Configuration
+  !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${PRODUCT}" 
+  !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
+  !define MUI_STARTMENUPAGE_DEFAULTFOLDER "${PRODUCT}"
+
+  !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER
   
+  !insertmacro MUI_PAGE_INSTFILES
+  
+  !insertmacro MUI_UNPAGE_CONFIRM
+  !insertmacro MUI_UNPAGE_INSTFILES
+
 ;--------------------------------
 ;Languages
  
   !insertmacro MUI_LANGUAGE "English"
-  
-;--------------------------------
-;Language Strings
-
-  ;Description
-  LangString DESC_SecMain ${LANG_ENGLISH} "Install ${MUI_PRODUCT} on your computer."
-
-;--------------------------------
-;Data
-  
-  LicenseData ".\GNU"
-
 
 ;--------------------------------
 ;Functions
@@ -147,37 +145,27 @@
    Exch $R0
  FunctionEnd
 
-Function .onInit
-
-  ; Default shortcuts path to nothing
-  StrCpy $9 ""
-
-FunctionEnd
-
 ;--------------------------------
 ;Installer Sections
 
-Section "!${MUI_PRODUCT}" SecMain
-
-  ;Disable selection
-  SectionIn RO
+Section "Dummy Section" SecDummy
 
   SetOutPath "$INSTDIR"
   File ".\ntfy_cd.exe"
   File ".\ntfy_cd.txt"
-
-  ;Store install folder
-  WriteRegStr HKLM "Software\${MUI_PRODUCT}" "" $INSTDIR
-
-  WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "UninstallString" "$INSTDIR\Uninstall.exe"
-  WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "InstallLocation" "$INSTDIR"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "DisplayName" "${MUI_PRODUCT}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "DisplayIcon" "$INSTDIR\ntfy_cd.exe,0"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "DisplayVersion" "${MUI_VERSION}"
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "VersionMajor" "${VER_MAJOR}"
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "VersionMinor" "${VER_MINOR}"
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "NoModify" "1"
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "NoRepair" "1"
+  
+  ;Store installation folder
+  WriteRegStr HKCU "Software\${PRODUCT}" "" $INSTDIR
+  
+  WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "UninstallString" "$INSTDIR\Uninstall.exe"
+  WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "DisplayName" "${PRODUCT}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "DisplayIcon" "$INSTDIR\ntfy_cd.exe,0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "DisplayVersion" "${VERSION}"
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "VersionMajor" "${VER_MAJOR}"
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "VersionMinor" "${VER_MINOR}"
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "NoModify" "1"
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}" "NoRepair" "1"
 
   ;Register the player
 
@@ -210,91 +198,85 @@ mark1:
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\Handlers\${PRODUCT_CLASS}PlayCDAudioOnArrival" "DefaultIcon" "$INSTDIR\ntfy_cd.exe,0"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\Handlers\${PRODUCT_CLASS}PlayCDAudioOnArrival" "InvokeProgID" "${PRODUCT_CLASS}.AudioCD"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\Handlers\${PRODUCT_CLASS}PlayCDAudioOnArrival" "InvokeVerb" "Play"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\Handlers\${PRODUCT_CLASS}PlayCDAudioOnArrival" "Provider" "${MUI_PRODUCT}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\Handlers\${PRODUCT_CLASS}PlayCDAudioOnArrival" "Provider" "${PRODUCT}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlers\PlayCDAudioOnArrival" "${PRODUCT_CLASS}PlayCDAudioOnArrival" ""
 
   WriteRegStr HKCR "${PRODUCT_CLASS}.AudioCD\Shell\Play\Command" "" "$INSTDIR\ntfy_cd.exe /play %1"
 
 EndRegistration:
 
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
  
     ;Create shortcuts
-    CreateDirectory "$SMPROGRAMS\${MUI_STARTMENUPAGE_VARIABLE}"
-    CreateShortCut "$SMPROGRAMS\${MUI_STARTMENUPAGE_VARIABLE}\${MUI_PRODUCT}.lnk" "$INSTDIR\ntfy_cd.exe"
-    CreateShortCut "$SMPROGRAMS\${MUI_STARTMENUPAGE_VARIABLE}\${MUI_PRODUCT} Readme.lnk" "$INSTDIR\ntfy_cd.txt"
-    CreateShortCut "$SMPROGRAMS\${MUI_STARTMENUPAGE_VARIABLE}\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+    CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PRODUCT}.lnk" "$INSTDIR\ntfy_cd.exe"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PRODUCT} Readme.lnk" "$INSTDIR\ntfy_cd.txt"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
   
   !insertmacro MUI_STARTMENU_WRITE_END
   
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
-  ;Run once installed
-  ExecWait '"$INSTDIR\ntfy_cd.exe" -SETUP'
-
 SectionEnd
-
-;Display the Finish header
-;Insert this macro after the sections if you are not using a finish page
-!insertmacro MUI_SECTIONS_FINISHHEADER
-
-;--------------------------------
-;Descriptions
-
-!insertmacro MUI_FUNCTIONS_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(DESC_SecMain)
-!insertmacro MUI_FUNCTIONS_DESCRIPTION_END
  
 ;--------------------------------
 ;Uninstaller Section
 
 Section "Uninstall"
 
-  MessageBox MB_OK|MB_ICONINFORMATION "If you are using AutoRun feature to start ${MUI_PRODUCT} on new Audio CD insertion it is recommended to temporary disable it or set a new default player"
+  MessageBox MB_OK|MB_ICONINFORMATION "If you are using AutoRun feature to start ${PRODUCT} on new Audio CD insertion it is recommended to temporary disable it or set to a new player"
 
   Delete "$INSTDIR\ntfy_cd.exe"
   Delete "$INSTDIR\ntfy_cd.txt"
   Delete "$INSTDIR\Uninstall.exe"
+  RMDir "$INSTDIR"
 
-  ;Remove shortcut
-  ReadRegStr ${TEMP} "${MUI_STARTMENUPAGE_REGISTRY_ROOT}" "${MUI_STARTMENUPAGE_REGISTRY_KEY}" "${MUI_STARTMENUPAGE_REGISTRY_VALUENAME}"
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
 
-  StrCmp ${TEMP} "" noshortcuts
+  StrCmp $MUI_TEMP "" noshortcuts
 
-    Delete "$SMPROGRAMS\${TEMP}\${MUI_PRODUCT}.lnk"
-    Delete "$SMPROGRAMS\${TEMP}\${MUI_PRODUCT} Readme.lnk"
-    Delete "$SMPROGRAMS\${TEMP}\Uninstall.lnk"
-    RMDir "$SMPROGRAMS\${TEMP}" ;Only if empty, so it won't delete other shortcuts
+  Delete "$SMPROGRAMS\$MUI_TEMP\${PRODUCT}.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\${PRODUCT} Readme.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
+  
+  ;Delete empty start menu parent diretories
+  StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
+ 
+  startMenuDeleteLoop:
+    RMDir $MUI_TEMP
+    GetFullPathName $MUI_TEMP "$MUI_TEMP\.."
+    
+    IfErrors startMenuDeleteLoopDone
+  
+    StrCmp $MUI_TEMP $SMPROGRAMS startMenuDeleteLoopDone startMenuDeleteLoop
+  startMenuDeleteLoopDone:
 
   noshortcuts:
 
-  RMDir "$INSTDIR"
-
-  DeleteRegKey /ifempty HKLM "Software\${MUI_PRODUCT}"
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}"
+  DeleteRegKey /ifempty HKLM "Software\${PRODUCT}"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}"
 
 ;WinXP removal
 ;Comented out for now
 ;  DeleteRegKey HKCR "${PRODUCT_CLASS}.AudioCD"
 ;  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlers\PlayCDAudioOnArrival\${PRODUCT_CLASS}PlayCDAudioOnArrival"
 ;  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\Handlers\${PRODUCT_CLASS}PlayCDAudioOnArrival"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\Handlers\${PRODUCT_CLASS}PlayCDAudioOnArrival" "Provider" "${MUI_PRODUCT} [Removed]"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\Handlers\${PRODUCT_CLASS}PlayCDAudioOnArrival" "Provider" "${PRODUCT} [Removed]"
 
 ;Delete the default player if present
 
-  ReadRegStr ${TEMP} HKCR "AudioCD\shell\play\command" ""
-  StrCmp ${TEMP}  "$INSTDIR\ntfy_cd.exe /play %1" 0 CDAFileStr
+  ReadRegStr $MUI_TEMP HKCR "AudioCD\shell\play\command" ""
+  StrCmp $MUI_TEMP "$INSTDIR\ntfy_cd.exe /play %1" 0 CDAFileStr
   DeleteRegKey HKCR "AudioCD\shell\play\command"
 
 ;Delete the default player if present
 CDAFileStr:
-  ReadRegStr ${TEMP} HKCR "cdafile\shell\play\command" ""
-  StrCmp ${TEMP}  "$INSTDIR\ntfy_cd.exe -play %1" 0 DisplayFinish
+  ReadRegStr $MUI_TEMP HKCR "cdafile\shell\play\command" ""
+  StrCmp $MUI_TEMP "$INSTDIR\ntfy_cd.exe -play %1" 0 UninstFinish
   DeleteRegKey HKCR "cdafile\shell\play\command"
 
-DisplayFinish:
-  ;Display the Finish header
-  !insertmacro MUI_UNFINISHHEADER
+UninstFinish:
 
 SectionEnd
