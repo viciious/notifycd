@@ -2241,7 +2241,7 @@ void DoSetup()
         DoOptions();
     }
 
-    MessageBox(NULL, "Notify installation is done!", APPNAME, MB_OK);
+    MessageBox(NULL, "Notify installation is complete!", APPNAME, MB_OK);
 }
 
 
