@@ -412,37 +412,28 @@ BOOL APIENTRY OptionsTab_General(
 }
 
 
-void SetTooltipTextBoxes(HWND hWnd, 
-						 BOOL bTooltip)
+void SetTooltipTextBoxes(HWND hWnd, BOOL bTooltip)
 {
-	char szExample[512];
+	char *pStr, szExample[512];
 
-	if (bTooltip) {
-		SetWindowText(GetDlgItem(hWnd, IDC_FORMAT), gs.szTooltipFormat);
-
-		ParseDiscInformationFormat(&gs.di[0], gs.szTooltipFormat, szExample);
-
-		SetWindowText(GetDlgItem(hWnd, IDC_EXAMPLE), szExample);
-	}
-	else {
-		SetWindowText(GetDlgItem(hWnd, IDC_FORMAT), gs.szCaptionFormat);
-
-		ParseDiscInformationFormat(&gs.di[0], gs.szCaptionFormat, szExample);
-
-		SetWindowText(GetDlgItem(hWnd, IDC_EXAMPLE), szExample);
-	}
+	pStr = bTooltip ? gs.szTooltipFormat : gs.szCaptionFormat;
+	SetWindowText(GetDlgItem(hWnd, IDC_FORMAT), pStr);
+	ParseDiscInformationFormat(&gs.di[0], pStr, szExample);
+	SetWindowText(GetDlgItem(hWnd, IDC_EXAMPLE), szExample);
 }
 
 
-void GetTooltipTextBoxes(HWND hWnd, 
-						 BOOL bTooltip)
-{
-	if (bTooltip)
-		GetWindowText(GetDlgItem(hWnd, IDC_FORMAT), gs.szTooltipFormat, 256);
-	else
-		GetWindowText(GetDlgItem(hWnd, IDC_FORMAT), gs.szCaptionFormat, 256);
+void GetTooltipTextBoxes(HWND hWnd, BOOL bTooltip) {
+	GetWindowText(GetDlgItem(hWnd, IDC_FORMAT), bTooltip ? gs.szTooltipFormat : gs.szCaptionFormat, 256);
 }
 
+static void OptionsTab_EnableCaptions(HWND hWnd, BOOL bEnable)
+{
+	EnableWindow(GetDlgItem(hWnd, IDC_FONT), bEnable);
+	EnableWindow(GetDlgItem(hWnd, IDC_USEFONT), bEnable);
+	EnableWindow(GetDlgItem(hWnd, IDC_TOOLTIP), bEnable);
+	EnableWindow(GetDlgItem(hWnd, IDC_CAPTION), bEnable);
+}
 
 BOOL APIENTRY OptionsTab_Tooltip(
     HWND  hWnd,
@@ -454,11 +445,12 @@ BOOL APIENTRY OptionsTab_Tooltip(
     	case WM_INITDIALOG: {
             SendDlgItemMessage(hWnd, IDC_TOOLTIP, BM_SETCHECK, 1, 0);
 
-            if (gs.nOptions & OPTIONS_SHOWONCAPTION)
-                SendDlgItemMessage(hWnd, IDC_SHOWONCAPTION, BM_SETCHECK, 1, 0);
             if (gs.nOptions & OPTIONS_USEFONT)
                 SendDlgItemMessage(hWnd, IDC_USEFONT, BM_SETCHECK, 1, 0);
-
+            if (gs.nOptions & OPTIONS_SHOWONCAPTION)
+                SendDlgItemMessage(hWnd, IDC_SHOWONCAPTION, BM_SETCHECK, 1, 0);
+			else
+				OptionsTab_EnableCaptions (hWnd, FALSE);
 			SetTooltipTextBoxes(hWnd, TRUE);
         }
 		break;
@@ -476,19 +468,11 @@ BOOL APIENTRY OptionsTab_Tooltip(
 			}
 
 			if (LOWORD(wParam) == IDC_SHOWONCAPTION) {
-                if (SendDlgItemMessage(hWnd, IDC_SHOWONCAPTION, BM_GETCHECK, 0, 0)) {
-                    EnableWindow(GetDlgItem(hWnd, IDC_FONT), TRUE);
-                    EnableWindow(GetDlgItem(hWnd, IDC_USEFONT), TRUE);
-                    EnableWindow(GetDlgItem(hWnd, IDC_TOOLTIP), TRUE);
-                    EnableWindow(GetDlgItem(hWnd, IDC_CAPTION), TRUE);
-                }
-                else {
-                    EnableWindow(GetDlgItem(hWnd, IDC_FONT), FALSE);
-                    EnableWindow(GetDlgItem(hWnd, IDC_USEFONT), FALSE);
-                    EnableWindow(GetDlgItem(hWnd, IDC_TOOLTIP), FALSE);
-                    EnableWindow(GetDlgItem(hWnd, IDC_CAPTION), FALSE);
-                }
-            }
+                if (SendDlgItemMessage(hWnd, IDC_SHOWONCAPTION, BM_GETCHECK, 0, 0))
+					OptionsTab_EnableCaptions (hWnd, TRUE);
+	            else
+					OptionsTab_EnableCaptions (hWnd, FALSE);
+	        }
             else if (LOWORD(wParam) == IDC_FONT) {
                 CHOOSEFONT sFont;
 
