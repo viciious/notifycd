@@ -1,0 +1,30 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by ntfy_cd.rc
+//
+#define HIDC_ADD                        0x807c03f7    // IDD_INFO_TAB_PLAYLIST
+#define HIDC_ARTIST                     0x806b03e9    // IDD_INFO
+#define HIDC_CATEGORY                   0x80760417    // IDD_INFO
+#define HIDC_CLEAR                      0x807c03f9    // IDD_INFO_TAB_PLAYLIST
+#define HIDC_DISCINFO                   0x807d042c    // IDD_INFO_TAB_DISCINFO
+#define HIDC_EDIT                       0x807f0432    // IDD_MOTD
+#define HIDC_INSERT                     0x807c03fb    // IDD_INFO_TAB_PLAYLIST
+#define HIDC_INTERNET                   0x806b0004    // IDD_INFO
+#define HIDC_LIST                       0x80690400    // IDD_CHOOSEDISC
+#define HIDC_MIN                        0x807203ef    // IDD_SETABSTRACKPOS
+#define HIDC_NOMOTD                     0x807f0433    // IDD_MOTD
+#define HIDC_PLAYLIST                   0x807c03ed    // IDD_INFO_TAB_PLAYLIST
+#define HIDC_RANDOM                     0x807c03fc    // IDD_INFO_TAB_PLAYLIST
+#define HIDC_REMOVE                     0x807c03f8    // IDD_INFO_TAB_PLAYLIST
+#define HIDC_RESET                      0x807c03fa    // IDD_INFO_TAB_PLAYLIST
+#define HIDC_SEC                        0x807203f0    // IDD_SETABSTRACKPOS
+#define HIDC_SETTRACK                   0x806b0003    // IDD_INFO
+#define HIDC_SLIDER                     0x80730404    // IDD_SKIP
+#define HIDC_SPIN                       0x80730409    // IDD_SKIP
+#define HIDC_TAB                        0x806b0428    // IDD_INFO
+#define HIDC_TITLE                      0x806b03eb    // IDD_INFO
+#define HIDC_TRACK                      0x806b03ec    // IDD_INFO
+#define HIDC_TRACKINFO                  0x807e042b    // IDD_INFO_TAB_TRACKINFO
+#define HIDC_TRACKS                     0x807c03ea    // IDD_INFO_TAB_PLAYLIST
+#define HIDC_TRACKS2                    0x807e042d    // IDD_INFO_TAB_TRACKINFO
+#define HIDC_TREE                       0x807103ff    // IDD_DB
+#define HIDOK                           0x80720001    // IDD_SETABSTRACKPOS

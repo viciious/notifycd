@@ -1,0 +1,679 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//   Notify CD Player for Windows NT and Windows 95
+//
+//   Copyright (c) 1996-1998, Mats Ljungqvist (mlt@cyberdude.com)
+//
+//   This program is free software; you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation; either version 2 of the License, or
+//   (at your option) any later version.
+//
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//
+//   You should have received a copy of the GNU General Public License
+//   along with this program; if not, write to the Free Software
+//   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+// History:
+// 960312 Mats      Initial coding
+// 960313 Mats      Added some CDPLAYER.EXE compatibility stuff
+// 960314 Mats      Added multi functions on left button click
+// 960314 Mats      Added centering of dialogs
+// 960314 Mats      Added more functionality to CDGetStatus. We can now 
+//                  determine if the inserted CD is aduio or not
+// 960314 Mats      Version 0.92
+// 960314 Mats      Added a settings dialog
+// 960314 Mats      Added some time displaying in tooltip
+// 960314 Mats      Added track nuber to tracks meny and tooltip
+// 960314 Mats      Added icon in about box
+// 960314 Mats      Version 0.93
+// 960314 Mats      Added the options Stop On Exit and Stop On Start
+// 960314 Mats      Version 0.94
+// 960315 Mats      Added enable/disable of a lot of things in the menu
+// 960315 Mats      The current track is checked in the Tracks menu
+// 960315 Mats      Added the MYWM_WAKEUP command which is sent by additional
+//                  instances to the original instance of the application.
+// 960315 Mats      Version 0.95
+// 960318 Mats      Fixed the missing track number in the tracks menu!
+// 960401 Mats      Version 0.96
+// 960401 Mats		Added poll timer!
+// 960401 Mats		Added tracktime in tracks menu
+// 960401 Mats		Added handling of the -TRACK parameter
+// 960401 Mats      Version 0.97
+// 960402 Mats		Fixed a bug in the pause handling, the track number was 
+//				    lost if the CD was in pause mode
+// 960402 Mats		Fixed the problem with the CD losing the pause mode
+// 960402 Mats      Version 0.98 (First release to the Internet)
+// 960403 Mats		Improved the CD Info dialog. Kbd only operation is now
+//				    easier when entering a new record.
+// 960403 Mats		Added the -PAUSE command line option. Can be used to 
+//					create a PAUSE/RESUME shortcut.
+// 960403 Mats		Fixed the background color to "transparent" around the icon
+// 960403 Mats      Version 0.99
+// 960403 Mats		Track text is selected when a track is selctecd in the 
+//					track listbox.
+// 960404 Mats		TOTAL REWRITE OF ALL CD FUNCTIONS! The player now consumes
+//					less CPU power!
+// 960404 Mats		Fixed the Resume problem!
+// 960404 Mats      Eject/Close now works!
+// 960404 Mats		Rewrote the track handling so it is zero based and can use
+//					programmed play!
+// 960404 Mats		Added programmed play to the CD Info dialog
+// 960404 Mats		Added Repeat
+// 960404 Mats		Check for CD change in CD Info when OK is pressed
+// 960409 Mats		Ampersand (&) made an underscore in menu if included in 
+//					track title. Fixed.
+// 960409 Mats		Added randomize
+// 960409 Mats		Added some tooltip display options
+// 960409 Mats		Added settings for left button functions
+// 960409 Mats		Decreased tabstops in CD Info listbox
+// 960409 Mats		Version 1.00beta2
+// 960409 Mats		Fixed some CD change bugs
+// 960410 Mats	    -PLAY and -TRACK played the wrong track!
+// 960412 Mats		Fixed some topptil not updating bugs due to resume not 
+//					sending notify...
+// 960412 Mats		Changing track name also changes the name in the playlist
+// 960412 Mats		Set track becomes default button if track edit is selected
+// 960412 Mats		Version 1.00beta3
+// 960413 Mats		When switching CD to a non audio CD or no CD at all the 
+//					tooltip was not updated
+// 960413 Mats		Eject/Load didn't always work, it now checks the status 
+//					for OPEN to know what to do.
+// 960415 Mats		Pause/Resume on stopped CD starts CD
+// 960417 Mats		Fixed the CD remain and CD position using programmed tracks
+// 960417 Mats		Fixed display of N/A if randomize
+// 960419 Mats		Version 1.00
+// 960420 Mats		Fixed the Quit message appearing even if the CD has been 
+//					taken out of the player...
+// 960420 Mats      Fixed Infinite repeat if not programmed
+// 960420 Mats      Version 1.01
+// 960520 Mats      Moved the time display stuff to a function that gets called
+//                  when the mouse is moved over the icon. This prevents the
+//                  app to query the time all the time...
+// 960520 Mats      Icon shows status!
+// 960524 Mats      Added Exit on CD remove
+// 960524 Mats      Added stop to the left button functions
+// 960528 Mats      Added display of programmed playtime in CD Info dialog
+// 960528 Mats      Added the CD Database Editor
+// 960528 Mats      Added the Export/Import functions to the db editor
+// 960528 Mats      Added ODBC support to the CD DB
+// 960529 Mats      Rewrote the ODBC support so it resides in a separate DLL
+//                  since the CD DB DLL is configurable in the INI file 
+//                  theoreticly anyone can create a CD DB this way.
+// 960529 Mats      Rewrote a lot of the status check stuff 
+// 960529 Mats      Added SKIP dialog
+// 960529 Mats      Added SETABSPOS dialog
+// 960529 Mats      Added repeat track
+// 960529 Mats      Added play whole, when CD is programmed
+// 960529 Mats      Version 1.10 Beta 1
+// 960530 Mats      Rewrote some of the DB dlg init stuff in order to make 
+//                  ODBC to work with one open statement. (SQL Server...)
+// 960530 Mats      Moved the DB DLL init after the -PLAY stuff that is sent
+//                  to an existing NTFY_CD instance. Otherwise the login 
+//                  failed.
+// 960531 Mats      Fixed the bug with the popup tracks menu showing the 
+//                  wrong current track
+// 960606 Mats      Decreased the size of the CD DB dialog
+// 960606 Mats      Added statistics to the CD DB dialog
+// 960606 Mats      Added TRACKLENGTH to tooltip options
+// 960607 Mats      Rewrote the TRACK DB handling for external DB drivers
+// 960609 Mats      Fixed a bug with repeat track during play whole
+// 960609 Mats      Fixed the bug with a CD in pause mode not detecting 
+//                  an eject of the cd.
+// 960609 Mats      Added -RANDOM cmd-line option
+// 960609 Mats      Added categories. Still some work in order to use it 
+//                  everywhere!
+// 960609 Mats      Added version handling in the export/import routines
+// 960616 Mats      Added context menu for records in the TreeView in DB 
+//                  editor
+// 960616 Mats      Added aliasing for records
+// 960616 Mats      Added category choose dialog for export and report
+// 960616 Mats      Splitted the source in order to make the CDDB maintaince 
+//                  app.
+// 960616 Mats      Version 1.10 Beta 2
+// 960715 Mats      Fixed the bug where repeat and repeat track status was 
+//                  still there when switching CD!
+// 960715 Mats      Fixed a cosmetic bug with the current time field in the
+//                  skip dialog being to small to display "No CD"
+// 960722 Mats      Added Selected time in the info dialog
+// 960730 Mats      Fixed the TreeView problem! The data should be copied into
+//                  pszText instead of setting pszText to point on the data!
+// 960730 Mats      Version 1.10
+// 960812 Mats      Fixed the bug with track names not being placed in the edit
+//                  field when selected in the listbox
+// 960812 Mats      Version 1.11
+// 960827 Mats      Clear ret string in CDDBGetInfo
+// 960827 Mats      Progress bar only shows each 10 counted
+// 960827 Mats      Added Delete to the Disc popup menu in the CDDB.
+// 960903 Mats      Fixed a bug with -RANDOM when no disc is inserted
+// 960903 Mats      Fixed a bug with -PLAY when a data disc was inserted
+// 960925 Mats      Added support for multiple physical CD-ROMs
+// 960925 Mats      Added "Full status check" option to use with older
+//                  CD-ROMs without notify functionality
+// 960925 Mats      Added "Prev always prev track" that always selects the 
+//                  previous track. This is the old functionality. 
+//                  The new prev functionality restarts the current track if
+//                  track has been playing for more than 5 seconds.
+// 960925 Mats      Devices meny only present with more that one CD-ROM
+// 960925 Mats      Config is saved when user OK's the options dialog
+// 960925 Mats      Status is saved and retrieved if "Remember status" is set
+// 960926 Mats      Tracks menu is broken into submenys if gs.di[0].nProgrammedTracks
+//                  is greater than gs.nMenuBreak.
+// 960926 Mats      -PAUSE starts CD in pause mode when this is the first
+//                  instance
+// 961024 Mats      Playing programmed tracks plays all sequential tracks 
+//                  before checking next track, this to prevent abrupting
+//                  tracks that have sequential music.
+// 961024 Mats      Broke up the Open/Close into two choises since the MCI
+//                  API doesn't provide me with a way to figure out if the tray
+//                  is closed or not if there's no disc in the tray. 
+//                  Windows CD Player can't handle this either.
+// 961024 Mats      Doubleclick in Tracks adds to playlist and in playlist
+//                  removes from playlist
+// 961024 Mats      Disable dialogs in menu when they are open
+// 961024 Mats      Added -STOP, -PREV, -NEXT cmd-line options for use with
+//                  second instance
+// 961025 Mats      1.20 beta 1
+// 961123 Mats      Fixed the bug that caused the player not to play programmed 
+//                  tracks after the last track on the CD if it was in the 
+//                  middle of the programmed list
+// 961123 Mats      Added column menu
+// 961123 Mats      Added Win95/NT4.0 look a like bitmap
+// 961124 Mats      Resizable CDDB dialog
+// 961124 Mats      Fixed the bug that caused the player to always play the 
+//                  first track when started from the Explorer.
+// 961124 Mats      Option to remove the menu bitmap
+// 961124 Mats      1.20 beta 2
+// 961211 Mats      Editing artist names in the DB dialog now works.
+// 961211 Mats      If first track isn't audio, check all tracks for audio
+//                  tracks in order to allow mixed data/audio discs.
+// 961211 Mats      Fixed the skip dialog so it works correctly with arrow 
+//                  keys, page up/page down and home/end
+// 961211 Mats      Changed the bitmap to the new look supplied by a user!
+//                  vginkel@idirect.com
+// 961212 Mats      Added a random buttom to the Info dialog. 
+// 961212 Mats      Improved the random play so it don't play the same track
+//                  until five other tracks has already been played!
+// 961213 Mats      Added the "No menu break" option that cause the player
+//                  not to break up track menu in submenus.
+// 961213 Mats      Fixed the problem with not resetting to the first track
+//                  after finishing playing
+// 961213 Mats      Fixed the problem with the menu breakup causing to many 
+//                  submenus
+// 961215 Mats      Added the categories dialog
+// 961216 Mats      Fixed a problem with repeat
+// 970102 Mats      Added an option for the default CD device
+// 970102 Mats      Fixed the bug with the tracks column menu not dissapering
+//                  when removing the CD.
+// 970102 Mats      Command line can handle different devices. Autostart from
+//                  the explorer for instance.
+// 970102 Mats      1.20 beta 3
+// 970114 Mats      Fixed the bug with the menubreak in the first splitted
+//                  tracks submeny
+// 970114 Mats      Rewrote the default device handling
+// 970114 Mats      Increased the size of the default device combo
+// 970114 Mats      Fixed cancel and ok while editing in the TreeView
+// 970114 Mats      Handle WM_ENDSESSION to shut down gracefully
+// 970117 Mats      Added an option to UpdateDiscInformation that tells it to do 
+//                  extensive track checking because CDGetCurrTrack might 
+//                  return the next track after a track has finished.
+// 970117 Mats      Added the CDDBSave function
+// 970117 Mats      Extended the strings that handle track names
+// 970117 Mats      Added a dialog that displays a message for DB DLL's that
+//                  doesn't support the DB DLL.
+// 970117 Mats      Added DB properties to the options dlg
+// 970120 Mats      1.20 beta 4
+// 970120 Mats      Fixed an invalid call to RemoveMenu
+// 970120 Mats      Fixed some memory leaks!
+// 970121 Mats      CDInit doesn't close and reopen each time
+// 970121 Mats      Changing device doesn't call CDInit after CDClose and 
+//                  fixing the menu. Instead it calls StatusCheck which in
+//                  turn calls CDInit if appropriate.
+// 970121 Mats      Fixed a bug with the command line and getting the device.
+//                  The command line wasn't parsed for device if if it wasn't
+//                  -PLAY, the Explorer by default sends /PLAY on autoplay...
+// 970124 Mats      Implemented the Get from Internet button
+// 970128 Mats      Added more debug info...
+// 970128 Mats      Moved disc info storage functions to a separate function
+//                  because InternetSend had to use it too!
+// 970203 Mats      1.20beta5 (first beta1 of CDDB)
+// 970211 Mats      Fixed the problem with the "no disc" stuff!
+// 970218 Mats      Disable CLOSE when playing
+// 970218 Mats      Started using WM_DEVICECHANGE to detect removal and 
+//                  insertion of discs. Seems to work ok.
+// 970224 Mats      1.20beta6
+// 970225 Mats      Fixed the problem with categories multiplying when doing
+//                  an internet get
+// 970310 Mats      Pressing the random button didn't update the playlist 
+//                  length
+// 970310 Mats      Fixed the bug with track titles becoming to long
+// 970310 Mats      Rewrote a little of the ID code. Moved CDDBGetDiscID into
+//                  CDGetID and removed the nCurrID variable. Only the gs.di[0].zCDDBID
+//                  is used from now.
+// 970312 Mats      Rewrote the random play. Tracks will only repeat themself 
+//                  after all other tracks have been played
+// 970319 Mats      Added support for WM_DISPLAYCHANGE which removes and 
+//                  adds the tray icon to fix the bad looking icon.
+// 970401 Mats      Added REPEAT command line option.
+// 970401 Mats      Notify closes the device if it finds a data disc
+// 970408 Mats      Fixed open after adding the above stuff
+// 970408 Mats      Fixed the bug with incorrect track lengths on mixed discs
+// 970408 Mats      Fixed a bug with switching devices
+// 970408 Mats      Fixed the bug where resume (after restarting the app) 
+//                  didn't get the MCI_SUCCESS message due to gs.hMainWnd being
+//                  NULL!
+// 970411 Mats      Fixed the bug where pressing ESC in the DB DLG caused a 
+//                  crash
+// 970411 Mats      1.20beta7 released to special testers
+// 970415 Mats		InitInfoDlg didn't set the category
+// 970423 Mats      Hide categories in options if using the CDDB plug-in
+// 970424 Mats		1.20 released
+// 970504 Mats		Added code that enable Full Status Check until first
+//                  device arrival message appears. 
+// 970504 Mats		Fixed the crash bug with programmed discs
+// 970504 Mats		Fixed the bug where WM_ENDSESSION didn't stop the cd
+// 970510 Mats		If full status check is enabled and we got devicechange
+//					we skip the WM_DEVICECHANGE message and trust the full
+//					status check
+// 970510 Mats		Enabled the categories again. Illegal categories are 
+//					refused when submitting to the CDDB repository and this
+//					is handled by the plug-in
+// 970511 Mats		Renamed the full status check option to no insert 
+//					notification
+// 970511 Mats		Fixed the repeat track bug where the disc stopped after
+//					the track that used to be repeated after the repeat track 
+//					function had been reset. Fixed by setting the dwTo 
+//					parameter to the very last millisecond of the disc.
+// 970511 Mats		Repeat track (gs.state.bRepeatTrack) wasn't reseted when changing
+//					the disc.
+// 970511 Mats		Wrote INF file for SETUP
+// 970513 Mats		Fixed the NoAudio bug. WM_DEVICECHANGE messages seems to 
+//					be sent from time to time without any devicechange!
+// 970513 Mats		Added timestamp to logfile
+// 970515 Mats      1.21
+// 970603 Mats		Fixed repeat bug
+// 970604 Mats		1.22
+// 970710 Mats      More fixing of the repeat bug
+// 970710 Mats		Fixed stuff for supporting the DB Editor with the CDDB 
+//					plug-in
+// 970727 Mats		Added extended disc and track info to the CD Info dialog
+// 9708xx Mats      Starting with an already playing disc that is not 
+//                  programmed do not cause an interruption in the music
+//                  anymore.
+// 970803 Mats      Removed support for plug-ins!
+// 970804 Mats      Moved a lot of stuff to separate files
+// 970804 Mats      Incorporated the CDDB stuff into the main program
+// 970804 Mats      Added MOTD
+// 970804 Mats      Choose disc dialog and others now come on top
+// 970804 Mats      Store copy in CDPLAYER.INI!
+// 970805 Mats      A lot of stuff with the database handling rewritten and
+//                  "rethought". You can now use the player without any local
+//                  storage but still use the remote CDDB server for example.
+//                  You can use the remote server and store in the INI file.
+// 970805 Mats      Added the show on caption feature
+// 970805 Mats      Added tracks combo to the skip dialog
+// 970805 Mats      Added tracks combo to the set abs track pos
+// 970811 Mats      CDDB can now use all categories for local storage
+// 970811 Mats      1.50beta1
+// 970811 Mats      Fixed some crashes
+// 970811 Mats      1.50beta2
+// 970812 Mats      Fixed proxy
+// 970812 Mats      Fixed a bug causing a crash when reporting on an empty 
+//                  db.
+// 970812 Mats      Fixed the save of new entry bug (CDDB)
+// 970812 Mats      Added check for existance of a category when saving to CDDB
+// 970812 Mats      Fixed crash when sending to Internet DB
+// 970812 Mats      Added customizable caption font
+// 970812 Mats      Fixed repainting of caption when string was shorter than 
+//                  before
+// 970812 Mats      Fixed the bug with query local requiring a CDDB path 
+//                  when using CDPLAYER.INI
+// 970812 Mats      Fixed a bug with extended disc information
+// 970813 Mats      Fixed the bug with importing records to the DB
+// 970813 Mats      Changed the handling of "No insert notifcation". The 
+//                  option will stick even though the app figures out it 
+//                  really has insert notification.
+// 970813 Mats      Added a messagebox telling the user of a remote connection
+//                  timeout.
+// 970813 Mats      Store copy in CDPLAYER.INI only stores if a disc was 
+//                  really found...
+// 970813 Mats      1.50 beta 3
+// 970814 Mats      Fixed the bug with empty disc choose dialog
+// 970815 Mats      Fixed the bug with changing device to drive Z:
+// 970815 Mats      Read-only checkbox should not be visible on export
+// 970818 Mats      Added a DBDelete when category changes in order to prevent
+//                  local CDDB to find the old entry.
+// 970818 Mats      Fixed the bug with not deleting temporary files when 
+//                  saving in CDDB format!
+// 970820 Mats      Fixed some painting problems with the "Show on caption" 
+//                  option.
+// 970820 Mats      Repaint foreground window caption on program exit if
+//                  show on caption option is used.
+// 970820 Mats      Rewrote parts of the CDDB parsing code to make it faster
+// 970821 Mats      Moved the "Show on active caption" option to the tooltip
+//                  tab.
+// 970821 Mats      Rewrote the options dialog so that tabs work
+// 970821 Mats      Fixed some enable/disable stuff in the options dialog
+// 970821 Mats      Convert settings from 1.21
+// 970824 Mats      Sending a PLAY command to another instance without a 
+//                  track specified will NOT restart the disc as it did 
+//                  before.
+// 970824 Mats      1.50 beta 4
+// 970825 Mats      Fixed the bug with database editor showing faulty entries
+// 970825 Mats      Fixed the bug with playing track -1
+// 970825 Mats      Fixed the bug with failing to save if the entry was in
+//                  the currently cached file.
+// 970825 Mats      Fixed the bug with caption text overlapping the window 
+//                  caption
+// 970826 Mats      Fixed the bug with changing category not deleting old
+//                  entry
+// 970826 Mats      Fixed the crash when using playlist
+// 970826 Mats      Rewrote some parts of the CDDB handling so that it uses
+//                  the track frames from the entry when saving, except when
+//                  submitting to the repository
+// 970827 Mats      Added a send choise to the context menu of a disc in
+//                  the database editor. This required some changes to the
+//                  CDDB handling that might be a problem
+// 970827 Mats      Starting first instance with /PLAY wont restart an already
+//                  playing disc if the track number supplied is -1
+// 970827 Mats      Added separate display options for the caption
+// 970902 Mats      Fixed so that Show On Caption doesn't paint on a 
+//                  WS_EX_TOOLWINDOW style window.
+// 970902 Mats      1.50 beta 5
+// 970905 Mats      Added External Command
+// 970905 Mats      Double-clicking on icon now uses the system double-click 
+//                  delay time
+// 970905 Mats		Added MIME headers to the outgoing mail
+// 970906 Mats		Fixed the bug that made the DB Editor crash under 
+//					Windows 95 (It might ahve caused crashes on NT too)
+// 970906 Mats      Fixed the bug that made the DB Editor hang sometimes
+// 970906 Mats		Made the DB Editor initialize faster!
+// 970907 Mats		Added a new tolltip/caption display option, Track number.
+//					This was automaticly shown before when the Track name 
+//					option was choosen.
+// 970907 Mats		Added option to show artist and CD title in the top of the
+//					popup menu.
+// 970908 Mats      Added scrollbars to the disc and track information tabs
+// 970908 Mats      Fixed so that the installer installs the documentation
+// 970910 Mats      Fixed a bug that made it impossible to import to INI file
+// 970910 Mats      Fixed a bug in importing where setting the CDDB tracks
+//                  could try to set more tracks than allocated.
+// 970910 Mats      Fixed more bugs with INI file handling
+// 970910 Mats      Fixed a bug with the context menu in the DB Editor
+// 970910 Mats      Fixed a bug with changing category in the DB Editor. It 
+//                  didn't delete the old entry if the category changed.
+// 970911 Mats      Open shareable by default
+// 970911 Mats      1.50 beta 6
+// 970915 Mats      Fixed the bug with autoplay
+// 970915 Mats      Added context sensitive help
+// 970915 Mats      1.50 beta 7
+// 970915 Mats      Fixed the motd bug with CDDB
+// 971015 Mats      Fixed the HTTP/1.1 bug
+// 971020 Mats      Added MIME/QP in the submit function
+// 971023 Mats      The tracks combo in the skip dialog gets updated if the 
+//                  disc is changed.
+// 971111 Mats      Added Proxy-Authentication
+// 971118 Mats      1.50 rc 1
+// 971203 Mats      Added horizontal scroll bar in the choosedisc dialog
+// 971209 Mats      Use static RTL to help drop the confusion around the 
+//                  MSVCRT*.DLL files some people seems to have.
+// 971215 Mats      1.50 rc 2
+// 971216 Mats      No track lenght limitation in the Info Dialog
+// 971216 Mats      No track lenght limitation in the Database Editor
+// 971216 Mats      Added the Ask for password option to the proxy 
+//                  authentication support
+// 971218 Mats      Fixed so that we can read "unlimited" lenght strings 
+//                  from CDDB entries although they should be limited to
+//                  76 chars or so according to the spec.
+// 971223 Mats      Fixed a bug in the DB Editor. Changes to Artist was never
+//                  saved.
+// 971223 Mats		Fixed a bug with reading disc entries that caused the
+//					last line to be skipped.
+// 971223 Mats		Random play doesn't continue after all tracks have played
+//					if the repeat flag isn't set.
+// 971223 Mats		When we have played all random tracks and are about to
+//					repeat the procedure, make sure we don't play the same
+//					track as we did just before we reseted the played random
+//					tracks list.
+// 971223 Mats		If we are in repeat mode and receive a PLAY command from
+//					the commandline or another instance, don't play track 1. 
+//					Play a random track there also.
+// 971227 Mats		Added version check in About box
+// 971229 Mats		Fixed a bug in the memory allocation for Track names when
+//					using CDPLAYER.INI
+// 971230 Mats      Version 1.50
+// 980105 Mats      When doing a remote query and receiving an entry we need
+//                  to accept any DISCID line since the server might have 
+//                  found a fuzzy match that doesn't include our DISCID
+// 980105 Mats		Fixed the bug with the crashing OPTIONS dialog
+//					When using the retail (4.00.00.950) version of 
+//					COMCTL32.DLL, you *MUST* have Popup style on the dialog, or
+//					it will CRASH AND BURN!
+//					Also, *DO NOT* use Help ID on controls or the page will
+//					show up empty! Don't you just love those guys sometimes?
+// 980106 Mats      Minor fix in the submit function. Some mail servers screw
+//                  up the headers otherwise.
+// 980106 Mats      Version 1.51
+// 980108 Mats      New control tab that handles the click and drag 
+//                  functionality. Done initially by Acy James Stapp 
+//                  <astapp@io.com> and somewhat modified by me
+// 980108 Mats      I added hotkeys to that tab from the idea of 
+//                  Shaun Ivory <shaun@ivory.org>
+// 980108 Mats      Moved/Rewrote the command-line handling.
+// 980108 Mats      Added -OPEN, -CLOSE
+// 980108 Mats      -RANDOM should now work on first instance
+// 980108 Mats      Added -EXITIFNODISC
+// 980108 Mats      Added the extremely good looking (just kidding) Credits 
+//                  dialog 
+// 980111 Mats      Rewrote the remote query code so it has the same logic
+//                  independent of the underlying protocol. This was also
+//                  done to support the query sites command without having to
+//                  write the same code again.
+// 980111 Mats		Added query sites
+// 980112 Mats      Found a bug with the disc id that was in uppercase 
+//                  sometimes...                 
+// 980112 Mats      Added DELETE and F2 keyboard support to the DB Editor
+// 980112 Mats      Added Query sites to CDDB Remote tab to update the site 
+//                  list
+// 980113 Mats      Found a bug in the Base64 encoding causing problems
+//                  if the password lenght was an (exact multiple of 3) + 1
+// 980114 Mats      Don't delete entry when category is changed if we use
+//                  the INI file as local database
+// 980114 Mats      Make query local and store local (INI) default if no
+//                  old options are found.
+// 980115 Mats      Found and fixed a parsing bug of CDDB entries in Windows
+//                  format that caused a crash
+// 980125 Mats		Major cleanup of the global variable mess. I also prepared
+//					for enhanced support for multiple players by making the
+//					disc info struct an array
+// 980205 Mats		Rewrote the disc information handling and gathering.
+// 980205 Mats		Added Queuing
+// 980215 Mats		Option to automatically check for new version when a disc
+//					is inserted or the program is started
+// 980215 Mats		RAS/DUN support
+// 980215 Mats		Moved repeat/random stuff to Play mode sub-menu
+// 980217 Mats      Handle both IP address and hostname address
+// 980218 Mats      Moved buttons and context menu to window menu in DB Editor
+// 980218 Mats      Export as CSV (Comma Separated)
+// 980219 Mats      Made the DISCINFO threadsafe by using a critical section
+// 980219 Mats      Made the MCI stuff threadsafe, required a lot of wDeviceID
+//                  arguments to be passed along
+// 980219 Mats      Query as a thread which makes the player start playing 
+//                  while it does a remote query. Possible due to the thread
+//                  safe stuff above
+// 980219 Mats      Fixed the track length bug where the last track didn't get
+//                  the correct length.
+// 980221 Mats      Only automatic remote queries are done as a separate 
+//                  thread.
+// 980221 Mats      Disc is added to the retrieve queue if not found in the 
+//                  local database and no automatic remote query is to be done
+// 980222 Mats      Rewrote tooltip/caption info to use a "printf" like format
+//                  string
+// 980222 Mats      Added simple search to the database editor
+// 980222 Mats      Add to queue if remote query fails due to server error
+//                  if we have auto queue enabled
+// 980222 Mats      Fixed so that DrawOnCaption Use WM_NCPAINT to redraw the 
+//                  caption
+// 980222 Mats      Fixed a small bug in the DrawOnCaption function. When
+//                  a window had a dialog box or something like that visible
+//                  it would cause flicker on the background parent.
+// 980222 Mats      Changed CheckForNewVersion to ask for download page
+//                  instead of "do you want to download it?"
+// 980222 Mats      Changed VERSION_PATH to a separate file for beta versions.
+//                  This way we can notify of beta upgrades as well as regular
+//                  upgrades.
+// 980222 Mats      Fixed so that the hello string is built from hostname and
+//                  host ip if no e-mail is supplied.
+// 980222 Mats      Fixed the Remote tab of the Options dialog which didn't 
+//                  remove HTTP settings when CDDB was choosen.
+// 980222 Mats      CheckForNewVersion didn't handle file not found
+// 980226 Mats      Make sure INI file writes is ok, otherwise complain!
+// 980303 Mats      Added minimal support for '\t' in CDDB entries
+// 980303 Mats      Added INI file query if we use a local CDDB database but
+//                  didn't find any information.
+// 980303 Mats      Beta versions will always have the logfile enabled!
+// 980303 Mats      Added the Register button in the Options dialog
+// 980304 Mats      Added the category view in the DB Editor
+// 980412 Mats		Made the category choose dialog multiselect and better 
+//					looking
+// 980412 Mats		Export to List Character Separated List uses the system
+//					configured list separator since Excel likes to use that 
+//					one
+// 980417 Mats		Adding new entried crashed!
+// 980418 Mats		Entries without title got saved as "Artist / "
+// 980418 Mats		Call CheckAmpersand before showing Artist/Title in the
+//					menu.
+// 980419 Mats		Added the browse button in the CDDB Local tab
+// 980420 Mats      1.60 beta 1
+// 980420 Mats      Fixed the bug with Options dialog crashing when we didn't
+//                  have DUN installed.
+// 980420 Mats      Fixed the bug with multiple CD Info dialogs showing up
+//                  if we use the Controls tab to specify a shortcut.
+// 980420 Mats      Fixed the problem with hotkeys being de-registered if the
+//                  user went into the Options dialog/Controls tab and choose
+//                  cancel.
+// 980420 Mats      Fixed the bug that caused CD Remaining to show negative
+//                  times...
+// 980421 Mats      Fixed a bug with the database editor using the current
+//                  discs number of tracks when reading the tracks from the
+//                  INI file...
+// 980421 Mats      Fixed the bug where track title displayed was relative to
+//                  the CD and not to the playlist.
+// 980421 Mats      Play whole is now a toggling option. You can revert to 
+//                  the programmed list by selecting it again.
+// 980421 Mats      Fixed the bug where changing the track name screw up 
+//                  the names in the playlist.
+// 980421 Mats      Fixed the crash when you changed category using the 
+//                  DB Editor.
+// 980421 Mats      1.60 beta 2
+// 980505 Mats		If we scan the DB in Windows format from the DB Editor
+//					we should use the ??TO?? wildcard.
+// 980505 Mats		A bug in ValidateDiscInfo caused the extended track info
+//					to not being <CR> translated.
+// 980531 Mats		Removed the result dialog when a disc was added to the 
+//					queue
+// 980531 Mats		Removed the test that checked if the disc was still 
+//					inserted before saving the CD Info.
+// 980531 Mats		Fixed the bug where queued items that wheren't found 
+//					caused notify to stop searching for other items.
+// 980531 Mats		Added a notification to tell the user that all queued 
+//					items wheren't found if the user choosed to manually 
+//					retrieve the items.
+// 980531 Mats		Made the CD Info dialog general and not bound to the 
+//					DISCINFO of the current disc.
+// 980531 Mats		Made it possible to enter the CD Info dialog for the
+//					selected disc in the DB Editor.
+// 980531 Mats		Fixed a crash that occured when the disc ended playing and
+//					the Skip dialog was visible.
+// 980601 Mats      Fixed the bug with the Play Whole menu command that didn't
+//                  get a checkbox when enabled.
+// 980601 Mats      Disable repeat track when in random play
+// 980601 Mats      If the Remember status option isn't set, playmodes aren't 
+//                  remembered between disc changes.
+// 980601 Mats      When using the keyboard or mouse to get info for the
+//                  current disc, the old default information wasn't cleared
+//                  and the new information was appended to the end of it.
+// 980601 Mats      Minor systray mouse click fix for other systray apps that
+//                  trigger on mousedown and remove their icon and let Notify
+//                  get the mouseup.
+// 980603 Mats		Use the SHChangeNotify to notify the shell when we 
+//					register Notify as the default player.
+// 980603 Mats		Added the Date: header to the submitted mails since 
+//					servers seem to want that.
+// 980603 Mats		If the Skip dialog is open while the CD stops it will
+//					do nasty things like crash and such.
+// 980603 Mats		If you select another track when in repeat track mode the
+//					new track will be repeated.
+// 980604 Mats      Use the dynamic RTL instead after all...
+// 980604 Mats      1.60 beta 3
+// 980605 Mats		Fixed submission problem where Notify failed to convert
+//					newlines.
+// 980605 Mats		Fixed bug with CD Info dialog opened from the database
+//					editor when no disc was in the drive.
+// 980605 Mats      Clicking on the icon didn't work...
+// 980605 Mats		1.60 beta 4
+// 980608 Mats		Added the entrytype=1 to the INI file entries. 
+//					CDPLAYER.EXE overwrites the entry if that line doesn't 
+//					exist
+// 980609 Mats      Export as CSV uses quotes around the strings
+// 980722 Mats      Check if a disc is in the tray before trying to do an
+//                  Internet get.
+// 980722 Mats      Ask if user is sure he/she want's to send the entry
+//                  before dialling
+// 980722 Mats      Catch exceptions and log them to the logfile as well as 
+//                  in a message box.
+// 980722 Mats      Remove the tray icon if EXITIFNODISC is used and there is
+//                  no disc in the drive.
+// 980722 Mats      Finally fixed the Register button
+// 980722 Mats      Setup Icons as well when using the Register button
+// 980722 Mats      Unregister hotkeys while in the Options dialog in
+//                  order to re-register a hotkey to another function
+// 980722 Mats      Fixed bug with resizing DB Dialog
+// 980722 Mats      Fixed the bug causing double-strings due to two parallel 
+//                  queries being made since DiscInit didn't return if it was
+//                  already inited
+// 980722 Mats      DB Editor is now updated when the user edits a disc in the
+//                  CD Info dialog (from the DB Editor)
+// 980722 Mats      If the user edits the currently playing disc in the DB 
+//                  Editor, the changes will be applied to the information 
+//                  about the running disc directly and not the next time
+//                  the information is loaded.
+// 980722 Mats      Added configurable user-agent
+// 980723 Mats      Fixed track search bug in DB Editor
+// 980723 Mats      Fixed the crash that occured when a disc didn't have a
+//                  numtracks entry in the INI file
+// 980723 Mats      Fixed the bug causing track lenght to be wrong in the 
+//                  toolbar/caption string on a programmed disc.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// History:
+//
+// 040419 Vic	    Use new\delete operators instead of malloc\free where possible
+// 040419 Vic	    Added and started to use safer string routines
+//                  (fix possibly unknown buffer overflows)
+// 040419 Vic	    Fixed a memory leak in CD Info Editor
+// 040419 Vic	    Fixed several memory leaks in parsing routines
+// 040419 Vic	    Always properly close sockets even if an error occured while
+//		    submitting or recieving a CD entry
+// 040419 Vic	    Made it so the menu bitmap is not loaded if it's not needed
+// 040419 Vic	    Ampersand is now displayed correctly in tooltips
+// 040419 Vic	    Changed default CDDB servers to *.freedb.org
+// 040419 Vic	    Added support for categories with names longer than 8 characters
+// 040419 Vic	    Fixed several memory leaks in parsing routines
+// 040419 Vic       Fixed multi-CD playing bug (failed to reinit CD) (00x029ah@mtu-net.ru)
+//                  (from beta16 by Stephen Hassard)
+// 040419 Vic       Added additional checking in cddb.cpp for smtp servers that have extended
+//                  results while login in. (dfjacobs@sshores.com) (from beta16 by Stephen Hassard)
+// 040419 Vic       Default to CDDB format for local storage
+// 040419 Vic       Browse for local CDDB folder dialog now selects the current path local CDDB path
+//                  as the default browsing path, plus creation of folders is allowed.
+// 040419 Vic	    Beta66 release candidate 
+//
+///////////////////////////////////////////////////////////////////////////////

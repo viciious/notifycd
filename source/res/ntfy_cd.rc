@@ -1,0 +1,920 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+// Generated Help ID header file
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "resource.hm"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral (Default) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_MAIN                ICON    DISCARDABLE     "main.ico"
+IDI_NOAUDIO             ICON    DISCARDABLE     "noaudio.ico"
+IDI_PLAY                ICON    DISCARDABLE     "play.ico"
+IDI_PAUSE               ICON    DISCARDABLE     "pause.ico"
+IDI_STOP                ICON    DISCARDABLE     "stop.ico"
+IDI_REMOTE              ICON    DISCARDABLE     "remote.ico"
+IDI_LOCAL               ICON    DISCARDABLE     "local.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_NOTIFY              BITMAP  DISCARDABLE     "ntfy_cd.bmp"
+#endif    // Neutral (Default) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,6,0,0
+ PRODUCTVERSION 1,6,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "Licensed under the terms of the GNU General Public License\0"
+            VALUE "FileDescription", "Notify CD Player\0"
+            VALUE "FileVersion", "1.60\0"
+            VALUE "InternalName", "ntfy_cd.exe\0"
+            VALUE "LegalCopyright", "Copyright (c) 1996-1998, Mats Ljungqvist\0"
+            VALUE "OriginalFilename", "ntfy_cd.exe\0"
+            VALUE "ProductName", "Notify CD Player\0"
+            VALUE "ProductVersion", "1.60\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_INFO DIALOGEX 0, 0, 299, 245
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "CD Information"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_ARTIST,39,7,180,14,ES_AUTOHSCROLL,0,HIDC_ARTIST
+    EDITTEXT        IDC_TITLE,39,23,180,14,ES_AUTOHSCROLL,0,HIDC_TITLE
+    COMBOBOX        IDC_CATEGORY,39,39,180,78,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDC_CATEGORY
+    EDITTEXT        IDC_TRACK,39,58,180,14,ES_AUTOHSCROLL,0,HIDC_TRACK
+    DEFPUSHBUTTON   "OK",IDOK,242,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,242,24,50,14
+    PUSHBUTTON      "Internet &DB...",IDC_INTERNET,242,41,50,14,0,0,
+                    HIDC_INTERNET
+    PUSHBUTTON      "&Set Track",IDC_SETTRACK,242,58,50,14,0,0,HIDC_SETTRACK
+    CONTROL         "Tab1",IDC_TAB,"SysTabControl32",TCS_TOOLTIPS | 
+                    WS_TABSTOP,7,80,285,158,0,HIDC_TAB
+    LTEXT           "Artist",IDC_STATIC,7,9,31,8
+    LTEXT           "Title",IDC_STATIC,7,25,31,8
+    LTEXT           "Category",IDC_STATIC,7,41,29,8
+    LTEXT           "Track",IDC_STATIC,8,61,21,8
+END
+
+IDD_DB DIALOGEX 0, 0, 380, 142
+STYLE WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "CD Database Editor"
+MENU IDR_DB
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Tree1",IDC_TREE,"SysTreeView32",TVS_HASBUTTONS | 
+                    TVS_HASLINES | TVS_LINESATROOT | TVS_EDITLABELS | 
+                    TVS_DISABLEDRAGDROP | WS_BORDER | WS_TABSTOP,7,14,102,
+                    116,WS_EX_CLIENTEDGE,HIDC_TREE
+    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | 
+                    LVS_EDITLABELS | LVS_NOSORTHEADER | WS_BORDER | 
+                    WS_TABSTOP,112,14,262,116,WS_EX_CLIENTEDGE,HIDC_LIST
+    LTEXT           "Artist's/CD's",IDC_ARTISTS,7,2,83,8
+    LTEXT           "Tracks",IDC_TRACKS,112,2,23,8
+END
+
+IDD_SETABSTRACKPOS DIALOGEX 0, 0, 246, 52
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Set absolute track position"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_TRACK,43,7,140,105,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP,0,HIDC_TRACK
+    EDITTEXT        IDC_MIN,43,24,24,14,ES_AUTOHSCROLL,0,HIDC_MIN
+    EDITTEXT        IDC_SEC,109,24,24,14,ES_AUTOHSCROLL,0,HIDC_SEC
+    DEFPUSHBUTTON   "&Set",IDOK,189,7,50,14,0,0,HIDOK
+    PUSHBUTTON      "&Close",IDCANCEL,189,24,50,14
+    LTEXT           "Track",IDC_STATIC,7,9,20,8
+    LTEXT           "Minutes",IDC_STATIC,7,27,26,8
+    LTEXT           "Seconds",IDC_STATIC,73,26,29,8
+END
+
+IDD_SKIP DIALOGEX 0, 0, 238, 73
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Skip"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Slider1",IDC_SLIDER,"msctls_trackbar32",TBS_AUTOTICKS | 
+                    WS_TABSTOP,9,23,140,20,0,HIDC_SLIDER
+    CONTROL         "Spin1",IDC_SPIN,"msctls_updown32",UDS_ARROWKEYS | 
+                    UDS_HORZ,153,23,16,10,0,HIDC_SPIN
+    COMBOBOX        IDC_TRACK,7,54,224,98,CBS_DROPDOWNLIST | CBS_AUTOHSCROLL | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDC_TRACK
+    DEFPUSHBUTTON   "Close",IDOK,181,7,50,14
+    LTEXT           "00:00",IDC_STATIC,7,7,19,8
+    LTEXT           "05:13",IDC_LEN,133,7,19,8
+    LTEXT           "02:03",IDC_TIME,65,7,24,8
+    LTEXT           "Track",IDC_STATIC,7,45,20,8
+END
+
+IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 134, 41
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "%s"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "Reading records",IDC_TITLE,7,7,120,8
+    CTEXT           "0",IDC_COUNT,7,21,120,8
+    CONTROL         "Progress1",IDC_PROGRESS,"msctls_progress32",WS_BORDER,7,
+                    20,120,14
+END
+
+IDD_CATEGORYCHOOSEEXTENDED DIALOG DISCARDABLE  0, 0, 195, 137
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Choose category"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,138,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,138,24,50,14
+    LTEXT           "Choose categories",IDC_STATIC,7,7,60,8
+    LISTBOX         IDC_LIST,7,22,125,108,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    LBS_EXTENDEDSEL | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_INFO_TAB_PLAYLIST DIALOGEX 0, 0, 280, 136
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         IDC_TRACKS,1,13,106,123,LBS_USETABSTOPS | 
+                    LBS_NOINTEGRALHEIGHT | LBS_EXTENDEDSEL | WS_VSCROLL | 
+                    WS_HSCROLL | WS_TABSTOP,0,HIDC_TRACKS
+    PUSHBUTTON      "&Add >>",IDC_ADD,115,13,50,14,0,0,HIDC_ADD
+    PUSHBUTTON      "&Insert >>",IDC_INSERT,115,29,50,14,0,0,HIDC_INSERT
+    PUSHBUTTON      "<< &Remove",IDC_REMOVE,115,45,50,14,0,0,HIDC_REMOVE
+    PUSHBUTTON      "&Clear",IDC_CLEAR,115,63,50,14,0,0,HIDC_CLEAR
+    PUSHBUTTON      "&Reset",IDC_RESET,115,79,50,14,0,0,HIDC_RESET
+    PUSHBUTTON      "&Random",IDC_RANDOM,115,95,50,14,0,0,HIDC_RANDOM
+    LISTBOX         IDC_PLAYLIST,173,13,106,123,LBS_USETABSTOPS | 
+                    LBS_NOINTEGRALHEIGHT | LBS_EXTENDEDSEL | WS_VSCROLL | 
+                    WS_HSCROLL | WS_TABSTOP,0,HIDC_PLAYLIST
+    LTEXT           "Tracks",IDC_STATIC,1,2,29,8
+    CTEXT           "Disc ID:",IDC_CURRID,109,114,60,8
+    CTEXT           "Alias ID:",IDC_ALIASID,109,127,60,8
+    LTEXT           "Playlist",IDC_PLAYLIST_STATIC,171,2,23,10
+    LTEXT           "(Play time: )",IDC_PLAYTIME,197,2,70,8
+    LTEXT           "(Selected time: 00:00)",IDC_SELTIME,31,2,70,8
+END
+
+IDD_INFO_TAB_DISCINFO DIALOGEX 0, 0, 280, 137
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_DISCINFO,1,13,278,123,ES_MULTILINE | ES_WANTRETURN | 
+                    WS_VSCROLL | WS_HSCROLL,0,HIDC_DISCINFO
+    LTEXT           "CD information",IDC_STATIC,1,2,56,8
+END
+
+IDD_INFO_TAB_TRACKINFO DIALOGEX 0, 0, 280, 136
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         IDC_TRACKS2,1,13,106,123,LBS_USETABSTOPS | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | 
+                    WS_TABSTOP,0,HIDC_TRACKS2
+    EDITTEXT        IDC_TRACKINFO,111,13,167,123,ES_MULTILINE | 
+                    ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL,0,HIDC_TRACKINFO
+    LTEXT           "Tracks",IDC_STATIC,1,2,29,8
+    LTEXT           "Track information",IDC_STATIC,111,2,56,8
+END
+
+IDD_CHOOSEDISC DIALOGEX 0, 0, 296, 210
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Choose entry"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         IDC_LIST,16,65,208,130,LBS_USETABSTOPS | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | 
+                    WS_TABSTOP,0,HIDC_LIST
+    DEFPUSHBUTTON   "OK",IDOK,239,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,239,24,50,14
+    LTEXT           "The remote server couldn't find an exact match but returned these possible entries. Please select an entry from the list!",
+                    IDC_STATIC,23,20,191,18
+    GROUPBOX        "Information",IDC_STATIC,7,7,224,40
+    GROUPBOX        "Possible entries",IDC_STATIC,7,54,224,149
+END
+
+IDD_MOTD DIALOGEX 0, 0, 343, 202
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Information from the CDDB server"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Never show this info in the future! (Otherwise it will only be showed when the information is changed!)",
+                    IDC_NOMOTD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,185,
+                    333,10,0,HIDC_NOMOTD
+    DEFPUSHBUTTON   "OK",IDOK,286,7,50,14
+    EDITTEXT        IDC_EDIT,7,7,271,175,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_READONLY | WS_VSCROLL,0,HIDC_EDIT
+END
+
+IDD_ASKFORPASSWORD DIALOG DISCARDABLE  0, 0, 236, 47
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enter proxy password"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PASSWORD,13,20,152,14,ES_PASSWORD | ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,179,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,179,24,50,14
+    GROUPBOX        "Proxy password",-1,7,7,163,34
+END
+
+IDD_OPTIONS_TAB_GENERAL DIALOG DISCARDABLE  0, 0, 236, 184
+STYLE WS_POPUP
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Stop CD on exit",IDC_STOPONEXIT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,13,65,10
+    CONTROL         "Stop CD on start",IDC_STOPONSTART,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,24,68,10
+    CONTROL         "Exit on CD remove",IDC_EXITONCDREMOVE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,35,75,10
+    CONTROL         "Prev always prev track",IDC_PREVALWAYSPREV,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,46,85,10
+    CONTROL         "Remember status",IDC_REMEMBERSTATUS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,57,75,10
+    CONTROL         "Automatically check for new version",
+                    IDC_AUTOCHECKFORNEWVERSION,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,69,129,10
+    CONTROL         "No insert notification",IDC_NOINSERTNOTIFICATION,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,13,80,10
+    CONTROL         "Tracks menu as column",IDC_TRACKSMENUCOLUMN,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,24,91,10
+    CONTROL         "No bitmap in menu",IDC_NOMENUBITMAP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,35,91,10
+    CONTROL         "No menu break",IDC_NOMENUBREAK,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,111,46,91,10
+    CONTROL         "Artist/Title in menu",IDC_ARTISTINMENU,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,57,91,10
+    COMBOBOX        IDC_DEFAULTDEVICE,8,103,81,84,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_POLLTIME,162,102,30,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Register %s as default player (Win 95\\98)",
+                    IDC_REGISTERDEFAULT,5,137,225,14
+    EDITTEXT        IDC_EXTERNALCOMMAND,8,166,202,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSE,215,166,11,14
+    GROUPBOX        "Misc options",IDC_STATIC,2,2,231,87
+    GROUPBOX        "Default CD device",IDC_STATIC,2,93,91,26
+    GROUPBOX        "Poll status every",IDC_STATIC,157,93,72,26
+    LTEXT           "second(s)",IDC_STATIC,194,104,34,8
+    GROUPBOX        "External program to run when a new disc is inserted",
+                    IDC_STATIC,2,155,231,28
+END
+
+IDD_OPTIONS_TAB_TOOLTIP DIALOG DISCARDABLE  0, 0, 236, 184
+STYLE WS_POPUP
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Show info on active caption",IDC_SHOWONCAPTION,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,15,104,10
+    CONTROL         "Use font",IDC_USEFONT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,19,28,43,10
+    PUSHBUTTON      "&Font...",IDC_FONT,63,25,25,14
+    CONTROL         "Tooltip",IDC_TOOLTIP,"Button",BS_AUTORADIOBUTTON | 
+                    BS_PUSHLIKE | WS_GROUP,39,62,37,10
+    CONTROL         "Caption",IDC_CAPTION,"Button",BS_AUTORADIOBUTTON | 
+                    BS_PUSHLIKE,79,62,40,10
+    EDITTEXT        IDC_FORMAT,42,75,184,14,ES_AUTOHSCROLL
+    LTEXT           "",IDC_EXAMPLE,43,95,183,18
+    LTEXT           "%0 - Artist",IDC_STATIC,12,130,32,8
+    LTEXT           "%1 - Title",IDC_STATIC,12,140,30,8
+    LTEXT           "%2 - Track title",IDC_STATIC,12,150,48,8
+    LTEXT           "%3 - Category",IDC_STATIC,12,160,44,8
+    LTEXT           "%4 - Track no",IDC_STATIC,67,130,45,8
+    LTEXT           "%5 - Track len",IDC_STATIC,67,140,46,8
+    GROUPBOX        "Format specifiers",IDC_STATIC,8,119,217,53
+    LTEXT           "%a - Track position",IDC_STATIC,122,130,61,8
+    LTEXT           "%b - Track remaining",IDC_STATIC,122,140,67,8
+    LTEXT           "%c - CD position",IDC_STATIC,122,150,52,8
+    GROUPBOX        "Caption",IDC_STATIC,2,2,124,42
+    GROUPBOX        "What to show in tooltip and/or caption",IDC_STATIC,2,48,
+                    229,135
+    LTEXT           "Set for:",IDC_STATIC,9,62,24,8
+    LTEXT           "Format:",IDC_STATIC,9,78,24,8
+    LTEXT           "Example:",IDC_STATIC,9,94,30,8
+    LTEXT           "%d - CD remaining",IDC_STATIC,122,160,58,8
+END
+
+IDD_OPTIONS_TAB_REMOTE DIALOG DISCARDABLE  0, 0, 236, 184
+STYLE WS_POPUP
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "HTTP",IDC_PROTHTTP,"Button",BS_AUTORADIOBUTTON,7,13,35,
+                    10
+    CONTROL         "CDDB",IDC_PROTCDDB,"Button",BS_AUTORADIOBUTTON,48,13,36,
+                    10
+    EDITTEXT        IDC_REMOTEPORT,115,11,36,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Query this server for site list...",IDC_QUERYSITES,128,
+                    30,99,14
+    COMBOBOX        IDC_REMOTESERVER,4,45,223,78,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    EDITTEXT        IDC_HTTPPATH,4,69,224,14,ES_AUTOHSCROLL
+    CONTROL         "Use Proxy",IDC_USEPROXY,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,8,96,45,10
+    EDITTEXT        IDC_PROXYSERVER,32,107,134,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PROXYPORT,193,107,27,14,ES_AUTOHSCROLL
+    CONTROL         "Use Proxy Authentication",IDC_USEAUTHENTICATION,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,8,126,104,10
+    EDITTEXT        IDC_USER,30,139,64,14,ES_AUTOHSCROLL
+    CONTROL         "Ask for password",IDC_ASKFORPASSWORD,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,139,126,71,10
+    EDITTEXT        IDC_PASSWORD,139,139,64,14,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_REMOTETIMEOUT,141,164,36,14,ES_AUTOHSCROLL
+    LTEXT           "Server ",IDC_STATIC,4,35,24,8
+    LTEXT           "Timeout for remote operations (in seconds)",IDC_STATIC,
+                    4,167,134,8
+    GROUPBOX        "Protocol",IDC_STATIC,2,2,230,27
+    LTEXT           "HTTP Path",IDC_STATIC,4,59,37,8
+    LTEXT           "Server",IDC_STATIC,6,109,22,8
+    LTEXT           "Port",IDC_STATIC,172,109,17,8
+    GROUPBOX        "Proxy",IDC_STATIC,2,85,230,74
+    LTEXT           "Port",IDC_STATIC,94,13,14,8
+    LTEXT           "(888 by default)",IDC_STATIC,156,13,50,8
+    LTEXT           "User",IDC_STATIC,6,141,19,8
+    LTEXT           "Password",IDC_STATIC,101,141,33,8
+END
+
+IDD_OPTIONS_TAB_LOCAL DIALOG DISCARDABLE  0, 0, 236, 184
+STYLE WS_POPUP
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_LOCALPATH,2,12,205,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSE,212,12,20,14
+    COMBOBOX        IDC_LOCALTYPE,2,42,101,43,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "Store a copy of the information in CDPLAYER.INI",
+                    IDC_STOREININI,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,1,
+                    124,171,10
+    LTEXT           "The path where the local CDDB database will be stored",
+                    IDC_STATIC,2,2,176,8
+    LTEXT           "Type of local CDDB database",IDC_STATIC,2,33,95,8
+    LTEXT           "(This allows You to see the information from another program capable\nof reading CDPLAYER.INI.\nNote that this options will increase the hard disk space for each CD entry.)",
+                    IDC_STATIC,2,138,226,34
+    LTEXT           "(Windows format will take less space on FAT partitions\nUnix format is more efficient and would not caue loss of hard disk space on most NTFS partitions)",
+                    IDC_STATIC,109,33,123,42
+END
+
+IDD_OPTIONS_TAB_EMAIL DIALOG DISCARDABLE  0, 0, 236, 184
+STYLE WS_POPUP
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_EMAILADDRESS,2,12,230,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EMAILSERVER,2,42,230,14,ES_AUTOHSCROLL
+    LTEXT           "E-mail address (used when submitting entries to the CDDB database)",
+                    IDC_STATIC,2,2,216,8
+    LTEXT           "SMTP Server",IDC_STATIC,2,31,44,8
+END
+
+IDD_OPTIONS_TAB_DATABASE DIALOG DISCARDABLE  0, 0, 236, 184
+STYLE WS_POPUP
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "CDPLAYER.INI database",IDC_USEINI,"Button",
+                    BS_AUTORADIOBUTTON,7,12,97,10
+    CONTROL         "CDDB local database",IDC_USECDDB,"Button",
+                    BS_AUTORADIOBUTTON,7,23,84,10
+    CONTROL         "Local database",IDC_QUERYLOCAL,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,52,105,10
+    CONTROL         "Remote CDDB database server",IDC_QUERYREMOTE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,63,221,10
+    CONTROL         "Add CD to queue if information could not be retrieved",
+                    IDC_AUTOADDQUEUE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,
+                    92,220,10
+    CONTROL         "Automatically get queued CD info when retrieving other CDs",
+                    IDC_AUTORETRIEVEQUEUE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,104,219,10
+    CONTROL         "Store changes in local database",IDC_STORELOCAL,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,134,117,10
+    CONTROL         "Store remote query result",IDC_STORERESULT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,145,94,10
+    GROUPBOX        "What to automatically query when a new CD is inserted",
+                    IDC_STATIC,2,42,230,36
+    GROUPBOX        "What to store in local database",IDC_STATIC,2,124,230,
+                    35
+    GROUPBOX        "What type of local database to use",IDC_STATIC,2,2,230,
+                    36
+    GROUPBOX        "Queue options",IDC_STATIC,2,82,230,37
+END
+
+IDD_OPTIONS_TAB_CATEGORIES DIALOG DISCARDABLE  0, 0, 236, 184
+STYLE WS_POPUP
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         IDC_CATEGORIES,7,18,140,158,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,183,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,183,24,50,14
+    PUSHBUTTON      "&Add",IDC_ADD,183,44,50,14
+    PUSHBUTTON      "&Remove",IDC_REMOVE,183,60,50,14
+    PUSHBUTTON      "&Set Name",IDC_SETNAME,183,89,50,14
+    EDITTEXT        IDC_NAME,153,105,80,14,ES_AUTOHSCROLL
+    LTEXT           "Name",-1,153,94,22,8
+    LTEXT           "Categories",-1,7,7,34,8
+END
+
+IDD_OPTIONS_TAB_CONTROLS DIALOG DISCARDABLE  0, 0, 236, 183
+STYLE WS_POPUP
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "1 Click",IDC_STATIC,8,20,29,8
+    CONTROL         "HotKey1",IDC_HOTKEY1,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,62,18,68,14
+    COMBOBOX        IDC_CLICK1,140,18,96,78,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "2 Clicks",IDC_STATIC,8,36,25,8
+    CONTROL         "HotKey1",IDC_HOTKEY2,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,62,34,68,14
+    COMBOBOX        IDC_CLICK2,140,34,96,78,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "3 Clicks",IDC_STATIC,8,52,34,8
+    CONTROL         "HotKey1",IDC_HOTKEY3,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,62,50,68,14
+    COMBOBOX        IDC_CLICK3,140,50,96,78,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "4 Clicks",IDC_STATIC,8,68,34,8
+    CONTROL         "HotKey1",IDC_HOTKEY4,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,62,66,68,14
+    COMBOBOX        IDC_CLICK4,140,66,96,78,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "5 Clicks",IDC_STATIC,8,84,33,8
+    CONTROL         "HotKey1",IDC_HOTKEY5,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,62,82,68,14
+    COMBOBOX        IDC_CLICK5,140,82,96,78,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Drag Right",IDC_STATIC,8,100,38,8
+    CONTROL         "HotKey1",IDC_HOTKEY6,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,62,98,68,14
+    COMBOBOX        IDC_DRAGR,140,98,96,78,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Drag Left",IDC_STATIC,8,116,34,8
+    CONTROL         "HotKey1",IDC_HOTKEY7,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,62,114,68,14
+    COMBOBOX        IDC_DRAGL,140,114,96,78,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Drag Up",IDC_STATIC,8,132,33,8
+    CONTROL         "HotKey1",IDC_HOTKEY8,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,62,130,68,14
+    COMBOBOX        IDC_DRAGU,140,130,96,78,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Drag Down",IDC_STATIC,8,148,39,8
+    CONTROL         "HotKey1",IDC_HOTKEY9,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,62,146,68,14
+    COMBOBOX        IDC_DRAGD,140,146,96,78,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Hotkey",IDC_STATIC,64,6,24,8
+    LTEXT           "Function",IDC_STATIC,139,5,28,8
+    LTEXT           "Icon operation",IDC_STATIC,8,6,46,8
+END
+
+IDD_CREDITS DIALOG DISCARDABLE  0, 0, 297, 231
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Credits"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&Close",IDOK,240,210,50,14
+    EDITTEXT        IDC_CREDITS,7,7,283,197,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | 
+                    WS_VSCROLL | WS_HSCROLL
+END
+
+IDD_SEARCH DIALOG DISCARDABLE  0, 0, 300, 46
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Search"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_SEARCH,7,19,224,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,243,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,243,24,50,14
+    LTEXT           "Enter string to search for",IDC_STATIC,7,7,78,8
+END
+
+IDD_CATEGORYCHOOSESINGLE DIALOG DISCARDABLE  0, 0, 195, 137
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Choose category"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,138,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,138,24,50,14
+    LTEXT           "Choose categories",IDC_STATIC,7,7,60,8
+    LISTBOX         IDC_LIST,7,22,125,108,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_INTERNET MENU DISCARDABLE 
+BEGIN
+    POPUP "Start"
+    BEGIN
+        MENUITEM "&Get from Internet",          IDM_INTERNETGET
+        MENUITEM "&Submit to Internet",         IDM_INTERNETSEND
+        MENUITEM SEPARATOR
+        MENUITEM "&Add to queue",               IDM_ADDTOQUEUE
+    END
+END
+
+IDR_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "Start"
+    BEGIN
+        MENUITEM "Play",                        IDM_PLAY
+        MENUITEM "Pause",                       IDM_PAUSE
+        MENUITEM "Stop",                        IDM_STOP
+        POPUP "Play mode"
+        BEGIN
+            MENUITEM "Repeat",                      IDM_REPEAT
+            MENUITEM "Random Play",                 IDM_RANDOMIZE
+            MENUITEM "Play whole",                  IDM_PLAYWHOLE
+            MENUITEM "Repeat track",                IDM_REPEATTRACK
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Next",                        IDM_NEXT
+        MENUITEM "Prev",                        IDM_PREV
+        MENUITEM SEPARATOR
+        POPUP "Tracks"
+        BEGIN
+            MENUITEM "Stuff",                       IDM_STUFF
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Eject",                       IDM_OPEN
+        MENUITEM "Close",                       IDM_CLOSE
+        MENUITEM SEPARATOR
+        POPUP "Other"
+        BEGIN
+            MENUITEM "Set absolute track position...", IDM_SETABSTRACKPOS
+            MENUITEM "Skip...",                     IDM_SKIP
+            MENUITEM SEPARATOR
+            MENUITEM "Add to queue",                IDM_ADDTOQUEUE
+            MENUITEM "Get queued items",            IDM_GETQUEUEDITEMS
+            MENUITEM "Remove queued items",         IDM_REMOVEQUEUEDITEMS
+            MENUITEM SEPARATOR
+            MENUITEM "CD Database Editor...",       IDM_DB
+        END
+        POPUP "CD Device"
+        BEGIN
+            MENUITEM "Stuff",                       IDM_STUFF
+        END
+        MENUITEM "CD Info/Program...",          IDM_INFO
+        MENUITEM "Options...",                  IDM_OPTIONS
+        MENUITEM "About...",                    IDM_ABOUT
+        MENUITEM "Quit",                        IDM_QUIT
+    END
+END
+
+IDR_DB MENU DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Export...",                  ID_FILE_EXPORT
+        MENUITEM "&Import...",                  ID_FILE_IMPORT
+        MENUITEM "&Report...",                  ID_FILE_REPORT
+        MENUITEM "&Statistics...",              ID_FILE_STATISTICS
+        MENUITEM SEPARATOR
+        MENUITEM "&Close",                      IDOK
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "By &Artist",                  ID_VIEW_BYARTIST
+        MENUITEM "By &Category",                ID_VIEW_BYCATEGORY
+    END
+    POPUP "&Search"
+    BEGIN
+        MENUITEM "&Artist...",                  ID_SEARCH_ARTIST
+        MENUITEM "T&itle...",                   ID_SEARCH_TITLE
+        MENUITEM "&Track...",                   ID_SEARCH_TRACK
+        MENUITEM SEPARATOR
+        MENUITEM "&Find next\tF3",              ID_SEARCH_FINDNEXT
+    END
+    POPUP "&Disc"
+    BEGIN
+        MENUITEM "Send to Internet...",         IDM_SEND
+        MENUITEM "Set category...",             IDM_SETCATEGORY
+        MENUITEM "Make alias...",               IDM_MAKEALIAS
+        MENUITEM "Delete\tDel",                 IDM_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "&Edit in CD Info dialog",     IDM_CDINFO
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_INFO, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 292
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 238
+    END
+
+    IDD_DB, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        BOTTOMMARGIN, 136
+    END
+
+    IDD_SETABSTRACKPOS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 239
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 45
+    END
+
+    IDD_SKIP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 231
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 66
+    END
+
+    IDD_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 127
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 34
+    END
+
+    IDD_CATEGORYCHOOSEEXTENDED, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 188
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 130
+    END
+
+    IDD_INFO_TAB_PLAYLIST, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 135
+    END
+
+    IDD_INFO_TAB_DISCINFO, DIALOG
+    BEGIN
+        RIGHTMARGIN, 270
+        BOTTOMMARGIN, 135
+    END
+
+    IDD_CHOOSEDISC, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 289
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 203
+    END
+
+    IDD_MOTD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 336
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 195
+    END
+
+    IDD_ASKFORPASSWORD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 229
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 40
+    END
+
+    IDD_OPTIONS_TAB_GENERAL, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 183
+    END
+
+    IDD_OPTIONS_TAB_TOOLTIP, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 183
+    END
+
+    IDD_OPTIONS_TAB_LOCAL, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 183
+    END
+
+    IDD_OPTIONS_TAB_EMAIL, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 183
+    END
+
+    IDD_OPTIONS_TAB_DATABASE, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 183
+    END
+
+    IDD_OPTIONS_TAB_CATEGORIES, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 183
+    END
+
+    IDD_CREDITS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 290
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 224
+    END
+
+    IDD_SEARCH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 293
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 39
+    END
+
+    IDD_CATEGORYCHOOSESINGLE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 188
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 130
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Swedish resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_SVE)
+#ifdef _WIN32
+LANGUAGE LANG_SWEDISH, SUBLANG_DEFAULT
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUT DIALOG DISCARDABLE  0, 0, 249, 125
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About %s"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,94,104,50,14
+    LTEXT           "Notify CD Player",IDC_STATIC,37,7,56,8
+    LTEXT           "Version %s",IDC_VERSION,93,7,103,8
+    CONTROL         "Copyright (c) 1996-1998, Mats Ljungqvist",IDC_STATIC,
+                    "Static",SS_LEFTNOWORDWRAP | WS_GROUP,37,19,130,8
+    ICON            IDI_MAIN,IDC_STATIC,7,7,21,20
+    CONTROL         "CDDB database originally by Ti Kan (ti@amb.org)\nCDDB server by Steve Scherf (steve@moonsoft.com)",
+                    IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,37,81,
+                    174,18
+    LTEXT           "(%s)",IDC_EMAIL,172,19,70,8,SS_NOTIFY
+    LTEXT           "%s",IDC_HOMEPAGE,96,63,138,8,SS_NOTIFY
+    LTEXT           "Visit homepage at",IDC_STATIC,37,63,57,8
+    PUSHBUTTON      "&Check for new version",IDC_CHECKVERSION,161,104,81,14
+    PUSHBUTTON      "C&redits...",IDC_CREDITS,7,104,55,14
+    LTEXT           "This program is free software; and is distributed under the GNU General Public License . See credits for more information.",
+                    IDC_STATIC,37,36,197,20
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 242
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 118
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Swedish resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
