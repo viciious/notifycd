@@ -217,7 +217,6 @@ BOOL DBGetDBID(char* pzID, DISCINFO* psDI)
         while (fgets(zStr, 256, fpDB)) {
             if (zStr[0] == '[') {
                 strcpy(pzID, &zStr[1]);
-                pzID[sizeof(pzID) - 1] = 0;
                 pzID[strlen(pzID) - 2] = 0;
 
                 // Check for artist name, otherwise this CD is deleted
