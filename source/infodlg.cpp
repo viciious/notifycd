@@ -90,8 +90,36 @@ BOOL InfoDlgNotifyHandler(HWND hWnd, UINT /*nMsg*/, WPARAM wParam, LPARAM lParam
                         EnableWindow(GetDlgItem(hWnd, IDC_TRACK), FALSE);
                     }
                     else {
+                        unsigned int nCurSel;
+                        unsigned int nID;
+                        HWND hTab;
+						INFODLGPARAM* psParam = (INFODLGPARAM*)GetWindowLong(hWnd, GWL_USERDATA);
+						DISCINFO* psDI = NULL;
+
+						if (psParam)
+							psDI = psParam->psDI;
+
                         EnableWindow(GetDlgItem(hWnd, IDC_SETTRACK), TRUE);
                         EnableWindow(GetDlgItem(hWnd, IDC_TRACK), TRUE);
+
+						if (psDI)
+						{
+							EnterCriticalSection(&gs.sDiscInfoLock);
+
+							if (nCurrInfoTab == 0)
+								nID = IDC_TRACKS;
+							else if (nCurrInfoTab == 2)
+								nID = IDC_TRACKS2;
+							hTab = asInfoTabs[nCurrInfoTab].hTabWnd;
+
+							nCurSel = SendMessage(GetDlgItem(hTab, nID), LB_GETCURSEL, 0, 0);
+							if (nCurSel != LB_ERR) {
+								SetWindowText(GetDlgItem(hInfoDlg, IDC_TRACK), psDI->ppzTracks[nCurSel]);
+								SendMessage(GetDlgItem(hInfoDlg, IDC_TRACK), EM_SETSEL, 0, -1);
+							}
+
+							LeaveCriticalSection(&gs.sDiscInfoLock);
+						}
                     }
                 }
                 break;
@@ -245,7 +273,7 @@ BOOL CALLBACK InfoTabDlgProc(
                 }
             }
             else if (HIWORD(wParam) == BN_CLICKED) {
-                // This is because the tab is it's own dialog and when I click the buttom it seems to
+                // This is because the tab is it's own dialog and when I click the button it seems to
                 // decide to set it as the default button for the tab dialog...
 
                 ChangeDefButton(hWnd, IDOK, LOWORD(wParam));
@@ -734,18 +762,17 @@ BOOL CALLBACK InfoDlgProc(
 							    }
 						    }
 
-						    if (nCurSel < (psDI->nMCITracks-1))
-							    nCurSel ++;
-						    else
-							    nCurSel = 0;
+                            if (nID == IDC_TRACKS) {
+								nCurSel = (nCurSel + 1) % psDI->nMCITracks;
+								SendDlgItemMessage(hTab, nID, LB_SETSEL, (WPARAM)TRUE, (LPARAM)nCurSel);
+							}
+							else {
+	                            SendDlgItemMessage(hTab, nID, LB_SETCURSEL, (WPARAM)nCurSel, (LPARAM)0);
+							}
 
-                            if (nID == IDC_TRACKS)
-                                SendMessage(GetDlgItem(hTab, nID), LB_SETSEL, TRUE, nCurSel);
-
-                            SetWindowText(GetDlgItem(hWnd, IDC_TRACK), psDI->ppzTracks[nCurSel]);
-						    SetActiveWindow(GetDlgItem(hWnd, IDC_TRACK));
-					    
-						    SendMessage(GetDlgItem(hWnd, IDC_TRACK), EM_SETSEL, 0, -1);
+							SetWindowText(GetDlgItem(hWnd, IDC_TRACK), psDI->ppzTracks[nCurSel]);
+							SetActiveWindow(GetDlgItem(hWnd, IDC_TRACK)); 
+							SendMessage(GetDlgItem(hWnd, IDC_TRACK), EM_SETSEL, 0, -1);
                         }
 
 						LeaveCriticalSection(&gs.sDiscInfoLock);
