@@ -63,7 +63,7 @@
 ;--------------------------------
 ;Data
   
-  LicenseData ".\ntfycd\GNU"
+  LicenseData ".\GNU"
 
 
 ;--------------------------------
@@ -163,8 +163,8 @@ Section "!${MUI_PRODUCT}" SecMain
   SectionIn RO
 
   SetOutPath "$INSTDIR"
-  File ".\ntfycd\ntfy_cd.exe"
-  File ".\ntfycd\ntfy_cd.txt"
+  File ".\ntfy_cd.exe"
+  File ".\ntfy_cd.txt"
 
   ;Store install folder
   WriteRegStr HKLM "Software\${MUI_PRODUCT}" "" $INSTDIR
