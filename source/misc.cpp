@@ -1101,9 +1101,9 @@ BOOL CheckForNewVersion(BOOL bUnattended)
 
     // Build query
 	if (gs.cddb.nCDDBOptions & OPTIONS_CDDB_USEPROXY) 
-        StringPrintf(zStr, sizeof(zStr), "GET http://%s%s HTTP/1.0", VERSION_SERVER, VERSION_PATH);
+        StringPrintf(zStr, sizeof(zStr), "GET http://%s%s HTTP/1.1", VERSION_SERVER, VERSION_PATH);
     else
-        StringPrintf(zStr, sizeof(zStr), "GET %s HTTP/1.0", VERSION_PATH);
+        StringPrintf(zStr, sizeof(zStr), "GET %s HTTP/1.1\nHost: %s", VERSION_PATH, VERSION_SERVER);
 
 	// Send query
 	if (SendString(s, zStr) == SOCKET_ERROR)
@@ -1142,6 +1142,8 @@ BOOL CheckForNewVersion(BOOL bUnattended)
     }
 	else if (!strncmp(zStr, "HTTP/", 5) && !strncmp(&zStr[9], "404", 3)) {
 		// File not found on remote host
+		DebugPrintf("File not found on remote host!");
+		MessageBox(NULL, "Could not check new version. Try again later.", APPNAME, MB_OK | MB_ICONINFORMATION);
 	}
     else {
 		if (strlen(zStr) < 100)
@@ -1157,10 +1159,16 @@ BOOL CheckForNewVersion(BOOL bUnattended)
 	if (atoi(zVersionNumber) > VERSION_VERSION) {
 		DebugPrintf("Newer version exists on server");
 
+		while(zVersionString[strlen(zVersionString)-1] == '\n' || zVersionString[strlen(zVersionString)-1] == '\r')
+			zVersionString[strlen(zVersionString)-1] = 0;
+
 		StringPrintf(zTmp, sizeof(zTmp), "A newer version (%s) exists. Do you want to go to the download page?", zVersionString);
 
 		if (MessageBox(NULL, zTmp, APPNAME, MB_YESNO | MB_ICONQUESTION) == IDYES) {
 			DebugPrintf("Downloading newer version");
+
+			while(zURL[strlen(zURL)-1] == '\n' || zURL[strlen(zURL)-1] == '\r')
+				zURL[strlen(zURL)-1] = 0;
 
 			if (ShellExecute(NULL, "open", zURL, NULL, ".", SW_SHOWNORMAL) <= (HINSTANCE) 32) {
 				sprintf(zTmp, "Failed to open URL %s", zURL);

@@ -29,32 +29,32 @@
 //#define BETA				// Remove when retail
 
 #ifdef BETA
-	#define VERSION			"1.60 beta 66"
+	#define VERSION			"1.61 beta 1"
 #else
-	#define VERSION			"1.60"
+	#define VERSION			"1.61"
 #endif
 
 #define CURR_CONFIG_VERSION 160
 
 #ifndef BETA
-#define VERSION_VERSION		16000		// Used to determine if a new version exists
+#define VERSION_VERSION		16100		// Used to determine if a new version exists
 										// in format NNnnxx where NN is major, nn minor and
 										// xx build number or something 
 #else
-#define VERSION_VERSION		00004		// Special case for BETA versions 
+#define VERSION_VERSION		00001		// Special case for BETA versions 
 #endif
 
-#define MAIL_ADDRESS		"mlt@cyberdude.com"
-#define HOMEPAGE_URL		"http://www.artech.se/~mlt/software"
+#define MAIL_ADDRESS		"digiman@users.sourceforge.net"
+#define HOMEPAGE_URL		"http://ntfycd.sourceforge.net"
 
-#define VERSION_SERVER		"www.artech.se"
+#define VERSION_SERVER		"ntfycd.sourceforge.net"
 
-#define COPYRIGHT_NOTICE	"Copyright (c) 1996-1998, Mats Ljungqvist"
+#define COPYRIGHT_NOTICE	"Copyright (c) 2004, Luchits Victor"
 
 #ifndef BETA
-	#define VERSION_PATH	"/~mlt/software/version.txt"
+	#define VERSION_PATH	"/version.txt"
 #else
-	#define VERSION_PATH	"/~mlt/software/version_beta.txt"
+	#define VERSION_PATH	"/version_beta.txt"
 #endif
 
 #define PROFILENAME			"cdplayer.ini"

@@ -7,21 +7,21 @@
            for Windows 95, Windows NT 4.0, Windows 2000 and Windows XP
 
                                     
-                               Version 1.60
+                               Version 1.61
 
                   Copyright (c) 2004, Victor Luchits
+                           digiman@users.sourceforge.net
+                    http://ntfycd.sourceforge.net
+
                   Copyright (c) 1996-1998, Mats Ljungqvist
-
                             mlt@cyberdude.com
-               (Please see section 7 for contact guidelines)
-
                     http://www.artech.se/~mlt/software
+
 
                           Snail: Mats Ljungqvist
                                Patron Pehrs v. 27
                                S-141 35  HUDDINGE
                                SWEDEN
-
 
 
  --- Contents ---------------------------------------------------------------
@@ -41,11 +41,9 @@
     
     5. Command-line options
 
-    6. Support mailing list
+    6. Feedback, suggestions, bug-reports
 
-    7. Feedback, suggestions, bug-reports
-
-    8. Credits
+    7. Credits
 
     
  --- 1. Introduction --------------------------------------------------------
@@ -53,13 +51,16 @@
     Notify CD Player is a CD player for regular audio CD's (including mixed
     data/audio) and resides in the systray (Also called Notify Tray). 
 
-    It works on Windows 95 and Windows NT 4.0.
+    It works on Windows 95, Windows NT 4.0, Windows 2000 and Windows XP.
 
     Built in support for the Internet based CD database CDDB which 
-    currently has more than 100,000 CD entries. (http://www.cddb.com)
+    currently has more than 100,000 CD entries. (http://cddb.com).
 
+    You might also want to check FreeDB CD database (http://freedb.org).
+
+    The original Notify CD Player was written by Mats Ljungqvist (mlt@cyberdude.com).
     The CDDB database was originally developed by Ti Kan (ti@amb.org) and 
-    the CDDB server by Steve Scherf (steve@moonsoft.com)
+    the CDDB server by Steve Scherf (steve@moonsoft.com).
 
     Fast operation of the most commonly used actions by left-clicking a 
     configurable number of times on the icon or click-draggin the icon.
@@ -86,8 +87,9 @@
 
  --- 2. Legal stuff ---------------------------------------------------------
 
-    Notify CD Player for Windows NT and Windows 95
+    Notify CD Player for Windows 95, Windows NT 4.0, Windows 2000 and Windows XP
 
+    Copyright (c) 2004, Victor Luchits (digiman@users.sourceforge.net)
     Copyright (c) 1996-1998, Mats Ljungqvist (mlt@cyberdude.com)
 
     This program is free software; you can redistribute it and/or modify
@@ -106,13 +108,14 @@
 
 
     Source code should be available at 
-    http://www.artech.se/~mlt/software/src/
+    http://sourceforge.net/projects/ntfycd/
+    and
+    http://artech.se/~mlt/software/src/
 
 
  --- 3. How to install/uninstall --------------------------------------------
 
-    Run the NTFY_CD.INF install file by right-clicking the icon in the 
-    Explorer and choose "Install".
+    Run the NCDSetup.exe file supplied with this archive and follow instructions.
 
     Use the control panel "Add/Remove Programs" applet to completely 
     uninstall Notify CD Player.
@@ -130,8 +133,8 @@
 
         The default settings are:
 
-        Play/Next       1 click
-        Pause/Resume    2 clicks
+        Pause/Resume    1 click
+        Play/Next       2 click
         Prev            3 clicks
         Stop            4 clicks
 
@@ -670,40 +673,17 @@
     running instance than they do when controlling the startup of the first
     instance.
 
- --- 6. Support mailing list ------------------------------------------------
+ --- 6. Feedback, suggestions, bug-reports ----------------------------------
 
-    There is a support mailing list setup at MIDRANGE dot COM that I 
-    monitor.
-
-    To subscribe to the mailing list send email to
-    "NOTIFYCD-SUB@midrange.com"  (subject and body of the message are
-    ignored).  To unsubscribe from the mailing list
-    "NOTIFYCD-UNSUB@midrange.com".
-
-    Mailing list services provided by MIDRANGE dot COM.
-    MIDRANGE dot COM is a non-commercial organization dedicated to the
-    free exchange of ideas and information amoung computer users on the
-    internet.  For more information, send email to 'info@midrange.com'.
- 
- --- 7. Feedback, suggestions, bug-reports ----------------------------------
-
-    All feedback, suggestions and bug-reports to mlt@cyberdude.com or to
-    the mailing list mentioned above.
+    All feedback, suggestions and bug-reports to digiman@users.sourceforge.net.
 
     Please check the FAQ page at http://www.artech.se/~mlt/software/faq.html 
     before sending a question! Your question might already have an answer!
 
     If you are submitting a bug-report, please check 
-    http://www.artech.se/~mlt/software/bugs.html before you send it to
-    make sure you submit a new bug.
-
-    To get on the list where I send announcements about new versions, 
-    please use SUBSCRIBE NOTIFY-LIST in the subject line.
-
-    To submit a suggestion, please use NOTIFY-SUGGESTION in the subject line.
-    
-    To submit a question, after checking the FAQ, please use NOTIFY-QUESTION 
-    in the subject line.
+    http://sourceforge.net/tracker/?group_id=107012&atid=646371 and
+    http://www.artech.se/~mlt/software/bugs.html before you send it to make 
+    sure you submit a new bug.
 
     To submit a bug-report, after checking the BUG list, please use
     NOTIFY-BUG in the subject line and include a logfile of a failing
@@ -715,13 +695,13 @@
     [NTFY_CD]
     LOGFILE=1
 
-    The resulting logfile is written to C:\NTFY_CD.LOG
+    The resulting logfile is written to %Installation Path%\NTFY_CD.LOG
 
     Also don't forget to include the version You are using. This is found in 
     the about box.
 
 
- --- 8. Credits -------------------------------------------------------------
+ --- 7. Credits -------------------------------------------------------------
 
     I would like to thank everyone that have supplied me with valuble 
     feedback and suggestions for new features as well as the beta testers

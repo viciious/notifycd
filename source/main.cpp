@@ -584,7 +584,7 @@ BOOL CALLBACK AboutDlgProc(
             sprintf(szStr, "Version %s", VERSION);
             SetWindowText(GetDlgItem(hWnd, IDC_VERSION), szStr);
 
-            sprintf(szStr, "(%s)", MAIL_ADDRESS);
+            sprintf(szStr, "%s", MAIL_ADDRESS);
             SetWindowText(GetDlgItem(hWnd, IDC_EMAIL), szStr);
 
             sprintf(szStr, "%s", HOMEPAGE_URL);
