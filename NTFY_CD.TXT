@@ -1,0 +1,612 @@
+
+
+                    
+
+                             Notify CD Player
+                                                
+                     for Windows 95 and Windows NT 4.0
+
+                                    
+                               Version 1.51
+
+                    
+                  Copyright (c) 1996-1998, Mats Ljungqvist
+
+                            mlt@cyberdude.com
+               (Please see section 7 for contact guidelines)
+
+                    http://www.artech.se/~mlt/software
+
+                          Snail: Mats Ljungqvist
+                               Patron Pehrs v. 27
+                               S-141 35  HUDDINGE
+                               SWEDEN
+
+
+
+ --- Contents ---------------------------------------------------------------
+
+    1. Introduction
+    
+    2. Legal stuff
+
+    3. How to install/uninstall
+    
+    4. How to use
+        - The fast left-click functions
+        - The right-click context menu
+        - CD Info/Program
+        - Options
+        - CD Database Editor
+    
+    5. Command-line options
+
+    6. Support mailing list
+
+    7. Feedback, suggestions, bug-reports
+
+    8. Credits
+
+    
+ --- 1. Introduction --------------------------------------------------------
+
+    Notify CD Player is a CD player for regular audio CD's (including mixed
+    data/audio) and resides in the systray (Also called Notify Tray). 
+
+    It works on Windows 95 and Windows NT 4.0.
+
+    Built in support for the Internet based CD database CDDB which 
+    currently has more than 100,000 CD entries. (http://www.cddb.com)
+
+    The CDDB database was originally developed by Ti Kan (ti@amb.org) and 
+    the CDDB server by Steve Scherf (steve@moonsoft.com)
+
+    Fast operation of the most commonly used actions by left-clicking a 
+    configurable number of times on the icon.
+
+    It has an extensive amount of functionality in the context menu shown by
+    right-clicking the icon. 
+    
+    Tray displays current "play" status.
+
+    Other features include:
+
+    - Compatible with the CD database used by the standard CD Player.
+    - Configurable tooltip and caption CD/track information display.
+    - Configurable track menu that shows the actual track names.
+    - Programmed play.
+    - Random/Repeat (Whole or Track).
+    - Skip function to change position inside a track.
+    - CD DB Editor with Export/Import functions.
+    - Responds to different Windows requests to allow autoplay etc.
+    - Can be set to exit when the CD is removed for seamless operation. 
+
+
+ --- 2. Legal stuff ---------------------------------------------------------
+
+    Notify CD Player for Windows NT and Windows 95
+
+    Copyright (c) 1996-1998, Mats Ljungqvist (mlt@cyberdude.com)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+    Source code should be available at 
+    http://www.artech.se/~mlt/software/src/
+
+
+ --- 3. How to install/uninstall --------------------------------------------
+
+    Run the NTFY_CD.INF install file by right-clicking the icon in the 
+    Explorer and choose "Install".
+
+    Use the control panel "Add/Remove Programs" applet to completely 
+    uninstall Notify CD Player.
+
+ --- 4. How to use ----------------------------------------------------------
+
+    - The fast left-click functions
+    -------------------------------
+
+        The fast left-click functions include the five most commonly used 
+        functions on a CD player. I.e. Play, Pause, Next, Prev, Stop.
+
+        These functions is accessable by clicking a configurable number of 
+        times on the icon in the tray.
+
+        The default settings are:
+
+        Play/Next       1 click
+        Pause/Resume    2 clicks
+        Prev            3 clicks
+        Stop            4 clicks
+
+        So to start playing Your CD, if it's not already playing due to 
+        Windows autoplay, You can click once on the icon.
+
+        Note how the icon change from the "stop" icon to the "play" icon!
+
+        To pause, click two times on the icon. The icon changes to a "pause"
+        icon.
+
+        To resume click one or two times (in this case Play/Next is the same
+        as resume). The CD starts to play again.
+
+        Change to the next track by clicking one time on the icon.
+
+        Stop the CD by clicking four times. The icon changes back to the 
+        "stop" icon.
+
+
+        The number of clicks are configurable in the Options dialog found 
+        under the Options command in the context menu.
+
+
+    - The right-click context menu
+    ------------------------------
+
+        The right-click context menu contains everything Notify CD Player can 
+        do besides the fast left-click functions.
+
+        The common Play/Stop/Next/Prev etc are all there, so are a Tracks 
+        menu, open and close options, repeat, random etc.
+
+        Tracks
+        ------
+        Choose the Tracks submenu and You'll see the names of the tracks (if 
+        You have any DB with data in it) or the default "Track 1" names along 
+        with track lengths. You can choose which track to play by selecting 
+        it in the tracks menu. 
+        The tracks menu can also be configured to be a separate column in the 
+        context menu and then the Tracks submenu will dissapear. 
+        The tracks menu can also be divided into submenys if the CD You 
+        currently have in the player has more than 25 tracks. 
+        This function can be disabled in the options dialog if You have a 
+        high screen resolution and therefore doesn't need to break up the 
+        tracks.
+
+        Other
+        -----
+        The Other submenu contains less used commands. 
+        
+        The functions found here are:
+        
+        - Play whole which causes the player to bypass any playlist You might 
+          have set up in the CD Info/Program dialog, but it doesn't remove 
+          the playlist from the configuration for this CD.
+        - Repeat Track causes the current track to be repeated.
+        - Set absolute position can be used to move to a specified track and 
+          a specified position on that track. For example if there is 
+          some interesting sound at a specific position on a certain track 
+          this can be used to find it again.
+        - Skip lets You cue inside the current track.
+        - CD Database Editor brings up the database editor described below.
+
+
+    - CD Info/Program
+    -----------------
+        
+        The CD Info/Program dialog plays a central role in Notify CD Player
+        since it's the place where You enter information about the CD 
+        playing, like Artist, tracks etc. This is also where You set up
+        a playlist where You can program tracks in a certain order or play
+        the same track many times etc.
+
+        - Playlist tab: This is where You enter the name of the CD and it's 
+            tracks. This is also the place where You program the CD 
+
+        - More CD info tab: This tab handles additional information about 
+            the CD.
+
+        - More track info tab: This tab handles additional information about 
+            the track.
+        
+        Internet DB:
+        - Get from Internet. This option queries the remote server for info 
+          about the current CD.
+        - Send to Internet. This option send this CD information to the 
+          central CDDB repository by e-mail.
+          
+          NOTE: The mail is sent using MIME and the text is encoded using 
+          Quoted-Printable. If your mailserver has a problem with this you
+          can disable it by setting No_MIME in the [CDDB] section of 
+          CDPLAYER.INI to 1.
+
+        
+    - Options
+    ---------
+
+        The options dialog is where You configure all the different functions
+        found in the player. It consist of a number of tabs described below.
+
+        General tab
+        ===========
+
+            This is where You configure the general (whoha!) options!
+
+            Misc options
+            ------------
+            - Stop CD on exit. Causes Notify CD Player to stop playing 
+              before exiting.
+            - Stop CD on start. Causes Notify CD Player to stop playing 
+              when starting.
+            - Exit on CD remove. Cause Notify CD Player to exit when the 
+              CD is removed. This can be pretty nice when used together 
+              with Windows autoplay since the Autoplay function will start 
+              Notify CD Player again when a CD is inserted.
+            - Prev always prev track. By default Notify CD Player restarts 
+              the current track if prev is choosen and more than five 
+              seconds have been played of the track instead of selecting 
+              the prev track. This option causes the player to always 
+              choose the prev track and never restart the track when 
+              prev is choosen.
+            - Remember status. Causes the player to remember certain 
+              status flags such as repeat and random between runs.
+            - No insert notification. Can be used on older CD devices 
+              or drivers that doesn't send notification messages when a 
+              CD is inserted/removed. This option is also needed if You 
+              have disabled the insert notification in Windows 95.
+            - Tracks menu as column. Causes the tracks menu to dissapear 
+              and appear as a second column in the context menu. 
+              Check it out! It's pretty neat!
+            - No bitmap in menu. Turns of the bitmap shown in the context 
+              menu.
+            - No menu break. By default Notify CD Player breaks up the 
+              tracks menu into submenus when a CD with more than 25 
+              tracks is used. This option prevents this.
+            - Artist/Title in menu. Show artist and title at the top in the
+              popup menu.
+
+            Default CD Device
+            -----------------
+            Specifies which CD device to use by default when starting up and no    
+            other device is specified on the command line. Only used by users 
+            with multiple CD devices.
+
+            Left button number of clicks
+            ----------------------------
+            This is where You configure the number of clicks to use for the fast
+            left-click operations. A value of 0 disables that function.
+
+            Poll status every
+            -----------------
+            Is used when no CD is in the drive or when the full status check
+            option is used. A value of 1 is ok.
+
+            External program to run when a new disc is inserted
+            ---------------------------------------------------
+            Enter the path to an program You want to run when a new CD is 
+            inserted. Artist and CD title will be sent as argument 1 and 2 
+            to the program. This can be used to update the .plan file to
+            include the name of the CD You are currently listening to or
+            whatever.
+            
+
+        Tooltip/Caption tab
+        ===================
+
+            Caption
+            -------
+            - Show info on active caption. This option displays the same 
+              information as the tooltip in the caption (title bar) of the
+              active window.
+            - Font. By selecting this option You can choose the font to use
+              when displaying info in the caption.
+        
+            This is where You configure what is to be shown in the tooltip
+            and the active caption.
+
+            
+            Tooltip and Caption buttons
+            ===========================
+            
+            Press one of them to select information regarding that type
+
+
+            Time display
+            ------------
+            Specifies what time information to show in the tooltip or caption.
+
+            CD Info display
+            ---------------
+            Specifies what CD information to show in the tooltip or caption.
+
+        Database tab
+        ============
+
+            This is where You configure different database options Notify
+            can use.
+
+            What type of local database to use
+            ----------------------------------
+
+            - CDPLAYER.INI database. This will use the regular CDPLAYER.INI
+              as local database. Note that INI files are limited to 64K 
+              under Windows 95.
+            - CDDB local database. This will enable the use of the CDDB 
+              local database format. This format will create a number of
+              directories in the path specified in the CDDB Local tab and
+              store CD entries in one of the two formats available. Use
+              this if Your database exceeds the Windows 95 limit on the 
+              INI file.
+
+            What to automaticly query when a new CD is inserted
+            -----------------------------------------------------
+
+            - Local database. This will query the local database for CD
+              information each time a CD is inserted.
+            - Remote CDDB database server. This will query the remote 
+              CDDB server configured in the CDDB Remote tab if the CD
+              was not found in the local database.
+
+            What to store in local database
+            -------------------------------
+
+            - Store changes in local database. This will store 
+              modifications to the CD entry in the local database.
+            - Store remote query result. This will directly store a 
+              found CD entry in the local database after querying the
+              remote CDDB server.
+        
+
+        CDDB Local
+        ==========
+
+            This is where You configure the local CDDB database (if used)
+
+            The path where the local CDDB database will be stored
+            -----------------------------------------------------
+
+            This is the path where the CDDB database will be stored. The 
+            player will create directories in this path as they are needed
+            and store files in the format specified below.
+
+            Type of local CDDB database
+            ---------------------------
+
+            This specifies the type of local CDDB database to use. The 
+            Unix format is faster but wastes much space on FAT partitions.
+            The Windows format is not as fast but wastes less space since 
+            it will store multiple CD entries in each file.
+
+            A complete local database can be downloaded from 
+            http://www.cddb.com
+
+
+        CDDB Remote
+        ===========
+        
+            This is where You configure the remote CDDB server used by
+            the remote query function.
+
+            Protocol
+            --------
+
+            - HTTP. Uses standard port 80 HTTP protocol to query for CD
+              information.
+            - CDDB. Uses the CDDB server protocol on port 888 to query for
+              CD information. May not work on many firewalls.
+            - Port is only used by the CDDB protocol and should, for the 
+              moment, always be set to 888.
+
+            
+            Server
+            ------
+
+            This specifies the fully qualified hostname of the server to 
+            query for CD information.
+
+            For an updated list of servers, check out
+            http://www.cddb.com/sites.html
+
+            HTTP Path
+            ---------
+
+            This is the path to the CGI script that runs the remote query. 
+            Should almost always be /~cddb/cddb.cgi. This is only used
+            for HTTP queries.
+
+            Proxy
+            -----
+
+            This is where You configure Your proxy server if needed.
+
+            - Use proxy. Check this button to enable the use of a proxy 
+              server.
+
+            - Proxy server. Enter the fully qualified hostname of the 
+              proxy server.
+
+            - Proxy port. The port that the proxy server listens to 
+              HTTP requests on.
+
+            - Use Proxy Authentication. Check this button to enable support
+              for proxy servers that require authentication.
+
+            - User. Fill in your proxy user name here.
+
+            - Ask for password. Check this if you don't like the fact about
+              storing your password in the CDPLAYER.INI file described below.
+
+            - Password. Fill in your proxy password here. 
+
+                Be aware that the password "encryption" used to store the 
+                password in the INI file isn't exactly rocket science so 
+                you store it there on your own risk!
+
+                Besides the source code used to store the password is free 
+                and the mangling of it is reversable so anyone with access
+                to your CDPLAYER.INI and the source code could easily 
+                steal it!
+
+            NOTE: Proxy authentication uses the 
+            "Proxy-Authorization: Basic <user>:<password>" standard where
+            <user> and <password> are sent base64 encoded. If your proxy
+            doesn't use this standard, proxy authentication will not work.
+
+            Timeout for remote operations
+            -----------------------------
+
+            This specifies the general timeout (in seconds) for all 
+            the remote operations.
+
+
+    
+        e-mail tab
+        ==========
+
+            This is where You configure e-mail information used by the 
+            submit feature.
+
+            E-mail address
+            --------------
+            Your e-mail address.
+
+            SMTP server
+            -----------
+            The fully qualified hostname of Your mail (SMTP) server.
+
+            Note: If Your server doesn't like the MIME headers that Notify
+            will send You can disable them by adding a No_MIME=1 to the 
+            [CDDB] section in CDPLAYER.INI
+
+
+        Categories tab
+        ==============
+
+            Choose this to alter the default set of categories.
+
+    - CD Database Editor
+    --------------------
+
+    The CD Database Editor is used to alter CD information or to export or 
+    import CD information.
+
+    The CDs have a right-click context menu where You can send the entry to 
+    the Internet reposiroty, make an alias, change the category of that CD 
+    or delete that CD from the DB.
+
+    Note that the DB Editor might be slow on LARGE local CDDB databases.
+
+    The export/import functions do NOT work between local CDDB databases and the
+    CDPLAYER.INI format.
+
+
+ --- 5. Command-line options ------------------------------------------------
+
+    Notify CD Player supports a number of command-line options which 
+    can be used when starting up. If the program is invoked as a second
+    instance it will send the commands to the already active instance. 
+    Using the command-line options makes it possible to make keyboard
+    shortcuts that pause or selects the next track etc.
+
+    -PLAY [track path] 
+        Starts playing the disc from the start or from the track number
+        specified by track path. Track path must include a drive specifier.
+        If the disc is paused it will continue.
+        Example: "NTFY_CD -PLAY Z:\TRACK03.CDA" will play track 3 on drive Z
+
+    -PAUSE
+        Toggles pause mode. If the disc is playing it will be paused, 
+        otherwise it will continue to play. If this is the first instance
+        it will start the player in pause mode.
+
+    -STOP
+        Stops the playing
+
+    -NEXT
+        Selects the next track in the playlist or restarts from the first 
+        track if the last one is playing.
+
+    -PREV
+        Selects the previous track in the playlist or restarts from the 
+        last track if the first one is playing.
+
+    -RANDOM
+        Toggles random mode
+
+    -REPEAT
+        Toggles repeat mode
+
+    Some of them can be used together, You could probably figure out which 
+    ones. Some of them work a little different when controlling an already
+    running instance than they do when controlling the startup of the first
+    instance.
+
+ --- 6. Support mailing list ------------------------------------------------
+
+    There is a support mailing list setup at MIDRANGE dot COM that I 
+    monitor.
+
+    To subscribe to the mailing list send email to
+    "NOTIFYCD-SUB@midrange.com"  (subject and body of the message are
+    ignored).  To unsubscribe from the mailing list
+    "NOTIFYCD-UNSUB@midrange.com".
+
+    Mailing list services provided by MIDRANGE dot COM.
+    MIDRANGE dot COM is a non-commercial organization dedicated to the
+    free exchange of ideas and information amoung computer users on the
+    internet.  For more information, send email to 'info@midrange.com'.
+ 
+ --- 7. Feedback, suggestions, bug-reports ----------------------------------
+
+    All feedback, suggestions and bug-reports to mlt@cyberdude.com or to
+    the mailing list mentioned above.
+
+    Please check the FAQ page at http://www.artech.se/~mlt/software/faq.html 
+    before sending a question! Your question might already have an answer!
+
+    If you are submitting a bug-report, please check 
+    http://www.artech.se/~mlt/software/bugs.html before you send it to
+    make sure you submit a new bug.
+
+    To get on the list where I send announcements about new versions, 
+    please use SUBSCRIBE NOTIFY-LIST in the subject line.
+
+    To submit a suggestion, please use NOTIFY-SUGGESTION in the subject line.
+    
+    To submit a question, after checking the FAQ, please use NOTIFY-QUESTION 
+    in the subject line.
+
+    To submit a bug-report, after checking the BUG list, please use
+    NOTIFY-BUG in the subject line and include a logfile of a failing
+    session.
+
+    To enable the logfile add LOGFILE=1 in the [NTFY_CD] section 
+    of CDPLAYER.INI as shown below:
+
+    [NTFY_CD]
+    LOGFILE=1
+
+    The resulting logfile is written to C:\NTFY_CD.LOG
+
+    Also don't forget to include the version You are using. This is found in 
+    the about box.
+
+
+ --- 8. Credits -------------------------------------------------------------
+
+    I would like to thank everyone that have supplied me with valuble 
+    feedback and suggestions for new features as well as the beta testers
+    which at times have gotten their hands on more or less useless version 
+    of this program. Thanks for Your patience! :-)
+
+    Thanks to vginkel@idirect.com for the bitmap used in the context menu.
+
+    Notify CD Player is written in plain C with plain Win32 and MCI API calls
+    using Microsoft Visual C++.
+
+    Well, thats about it, happy playing!
+

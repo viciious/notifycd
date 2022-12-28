@@ -1,0 +1,37 @@
+* Hotkeys with RegisterHotKey
+* Get server list from server!
+* Use WinINet functions!
+* Checkout _DEV_BROADCAST_NET in WM_DEVICECHANGE DEVICEARRIVAL
+* More DUN support. Ask for later download if not connected etc. 
+* Search in DB Editor
+* -EJECT och -CLOSE
+
+> If CD Information | Internet DB | Get from Internet yields 'No disk
+> info found on remote server', it's somewhat difficult to switch
+> servers (have to go to Options | DB Options | select new server).  I
+> would like the CDDB Options dialog to be directly accessible from the
+> Internet DB popup menu or maybe an option to automatically search all
+> of the available servers if 'no disk info ...' resulted from the
+> current server.
+
+* Multidisc play (Random etc)
+* Option to mute system sounds when disc is playing. 
+
+* If Notify CD can include the function of controlling CD volume, it'll be
+* excellent!
+
+> What do you think about changing your menu structure as follows:
+> Eliminate REPEAT and RANDOM PLAY from your main pop-up menu and the
+> REPEAT TRACK from the OTHER menu, and make a new menu option called PLAY
+> MODE >. Under this, have the following menu items:
+> REPEAT CD
+> REPEAT TRACK
+> RANDOM PLAY
+
+* Kanske man skall lägga till en -PLAYORPAUSE så att man kan 
+  toggla. -PAUSE, som i normala fall togglar, funkar ju inte så bra vid
+  första instansen.
+* Use DrawCaption or something for caption information
+* Sort on Category in DB Edit.
+
+* Click and drag on the icon to select some functions

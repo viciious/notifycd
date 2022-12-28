@@ -1,0 +1,109 @@
+; Author: Mats Ljungqvist (mlt@cyberdude.com)
+
+[Version]
+Signature="$CHICAGO$"
+
+; W h a t  t o  i n s t a l l
+[DefaultInstall]
+CopyFiles=copy.prog, copy.inf
+UpdateInis=Shortcut.Add
+AddReg=Reg.Add, Reg.Uninstall95.Add, Reg.Run
+Uninstall=DefaultUninstall
+
+[DefaultInstall.ntx86]
+CopyFiles=copy.prog, copy.inf
+UpdateInis=Shortcut.Add
+AddReg=Reg.Add, Reg.UninstallNT.Add, Reg.Run
+Uninstall=DefaultUninstall.ntx86
+
+; W h a t  t o  r e m o v e
+[DefaultUninstall]
+DelFiles = copy.prog, copy.inf
+UpdateInis = Shortcut.Remove
+AddReg = Reg.Restore
+DelReg = Reg.Remove, Reg.Uninstall95.Remove, Reg.UninstallNT.Remove
+
+; W h e r e   t h e   f i l e s   c o m e   f r o m
+[SourceDisksNames]
+1="Notify CD Player","",1
+
+[SourceDisksFiles]
+ntfy_cd.exe=1
+ntfy_cd.Inf=1
+ntfy_cd.txt=1
+
+; F i l e   c o p y i n g   s e c t i o n s (where the go to).
+[DestinationDirs]
+copy.prog=24,%PROGRAM_FOLDER%
+copy.inf=17
+
+; w h a t   f i l e s   a r e   c o p i e d   w h e r e
+[copy.prog]
+ntfy_cd.exe
+ntfy_cd.txt
+
+[copy.inf]
+ntfy_cd.inf
+
+
+; A d d  S h o r t c u t
+[Shortcut.Add]
+setup.ini, progman.groups,,"group1=%PROGMAN_FOLDER%"
+setup.ini, group1,,"""%PROGMAN_DESC%"",""""""%24%\%PROGRAM_FOLDER%\ntfy_cd.exe"""""",,,,""%24%\%PROGRAM_FOLDER%"""
+
+; R e m o v e  S h o r t c u t
+[Shortcut.Remove]
+setup.ini, progman.groups,,"group1=%PROGMAN_FOLDER%"
+setup.ini, group1,,"""%PROGMAN_DESC%""
+
+; R e g i s t r y  A d d
+[Reg.Add]
+HKCR,AudioCD,,,"AudioCD"
+HKCR,AudioCD,"EditFlags",1,02,00,00,00
+HKCR,AudioCD\DefaultIcon,,,"%11%\shell32.dll,40"
+HKCR,AudioCD\shell,,,"play"
+HKCR,AudioCD\shell\play,,,"&Play"
+HKCR,AudioCD\shell\play\command,,,"%24%\%PROGRAM_FOLDER%\ntfy_cd.exe /play %1"
+HKCR,cdafile,,,"CD Audio Track"
+HKCR,cdafile\DefaultIcon,,,"%11%\cdplayer.exe,1"
+HKCR,cdafile\shell,,,"play"
+HKCR,cdafile\shell\play,,,"&Play"
+HKCR,cdafile\shell\play\command,,,"%24%\%PROGRAM_FOLDER%\ntfy_cd.exe -play %1"
+
+[Reg.Uninstall95.Add]
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\NotifyCDPlayer,DisplayName,,"%REMOVE_DESC%"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\NotifyCDPlayer,UninstallString,,"%10%\rundll.exe setupx.dll,InstallHinfSection DefaultUninstall 4 %17%\ntfy_cd.inf"
+
+[Reg.UninstallNT.Add]
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\NotifyCDPlayer,DisplayName,,"%REMOVE_DESC%"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\NotifyCDPlayer,UninstallString,,"%11%\rundll32.exe syssetup.dll,SetupInfObjectInstallAction DefaultUninstall 4 %17%\ntfy_cd.inf"
+
+; R e g i s t r y  R e m o v e
+[Reg.Remove]
+HKCR,AudioCD\shell\play\command,,,"%24%\%PROGRAM_FOLDER%\ntfy_cd.exe /play %1"
+HKCR,cdafile\shell\play\command,,,"%24%\%PROGRAM_FOLDER%\ntfy_cd.exe -play %1"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\NotifyCDPlayer,,,
+
+[Reg.Uninstall95.Remove]
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\NotifyCDPlayer,DisplayName,,"%REMOVE_DESC%"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\NotifyCDPlayer,UninstallString,,"%10%\rundll.exe setupx.dll,InstallHinfSection DefaultUninstall 4 %17%\ntfy_cd.inf"
+
+[Reg.UninstallNT.Remove]
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\NotifyCDPlayer,DisplayName,,"%REMOVE_DESC%"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\NotifyCDPlayer,UninstallString,,"%11%\rundll32.exe syssetup.dll,SetupInfObjectInstallAction DefaultUninstall 4 %17%\ntfy_cd.inf"
+
+; R e g i s t r y  R e s t o r e
+[Reg.Restore]
+HKCR,AudioCD\shell\play\command,,,"%11%\cdplayer.exe /play %1"
+HKCR,cdafile\shell\play\command,,,"%11%\cdplayer.exe -play %1"
+
+; R u n   o n c e   i n s t a l l e d
+[Reg.Run]
+HKLM,Software\Microsoft\Windows\CurrentVersion\RunOnce,NotifyCDPlayer,,"%24%\%PROGRAM_FOLDER%\ntfy_cd.exe -SETUP"
+
+; L o c a l i s e d   s t u f f 
+[Strings]
+PROGRAM_FOLDER    = "Progra~1\NotifyCD"
+PROGMAN_FOLDER    = "Access~1\Multimedia"
+PROGMAN_DESC      = "Notify CD Player"               ; Shortcut name
+REMOVE_DESC       = "Notify CD Player"
