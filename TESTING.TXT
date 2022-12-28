@@ -1,0 +1,48 @@
+How to test a new build of Notify CD Player
+===========================================
+
+Basic CD control functions
+--------------------------
+* Play
+* Pause
+* Autoplay
+* Next, Prev
+* Repeat
+* Repeat Track
+* Random - Does it stop after all tracks?
+* Repeat and Random - Does it repeat the random?
+* Playlist - Does it play all track and without pause between contignous tracks?
+* Repeat of playlist - Does it repeat the playlist?
+* Random of playlist - Does it play all playlist tracks and only thoose tracks?
+* Repeat and Random of playlist - Does it repeat the random?
+* Play whole. Does it play the whole CD and preserve the playlist?
+* Eject and Close
+* Command-line options? -RANDOM, -REPEAT, -PREV, -NEXT, -STOP, -PLAY, -PAUSE
+
+General
+-------
+* Check for new version
+* Does all options stick when they are selected?
+* Does the tooltip and display on caption work?
+
+Database functions
+------------------
+-- For both Local CDDB (Unix and Windows) and CDPLAYER.INI --
+
+* Is it possible to change everyting in the CD Info dialog?
+* Is it possible to change artist/disc title/track title in the DB Editor?
+* Does Export work?
+* Does Import work?
+* Does Report work?
+* Does Statistics work?
+* Is it possible to change the category?
+* Is it possible to send to Internet?
+* Is it possible to delete a disc?
+
+Remote query
+------------
+* Remote query using the CDDB protocol
+* Remote query using plain HTTP protocol
+* Remote query using HTTP and a proxy
+* Remote query using HTTP, proxy and authentication
+
